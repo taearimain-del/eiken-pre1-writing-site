@@ -1,6 +1,4 @@
 <meta name="robots" content="noindex, nofollow">
-<style>html{visibility:hidden}</style>
-<script src="https://my-portal-ryu.netlify.app/access-gate.js"></script>
 <title>英検準1級 ライティング特訓 — 今日のタスク</title>
 <style>
   @font-face {
@@ -400,7 +398,22 @@
   .action-btn:hover { background: var(--surface-2); }
   .action-btn.copied { background: var(--done-bg); border-color: var(--done); color: var(--done); }
   .action-btn[disabled] { opacity: 0.45; cursor: default; border-color: var(--border-strong); color: var(--text-muted); }
+  .action-btn.subtle-btn { border-color: var(--border-strong); color: var(--text-muted); font-weight: 500; padding: 8px 12px; min-height: 36px; font-size: 12.5px; }
+  .action-btn.subtle-btn:hover { border-color: var(--accent); color: var(--accent); }
   .action-hint { font-size: 12.5px; color: var(--text-muted); }
+
+  .summary-passage {
+    margin-top: 10px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .summary-passage p { margin: 0 0 10px; }
+  .summary-passage p:last-child { margin-bottom: 0; }
 
   /* ---------- grading / scores ---------- */
   .grade-block { margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border-strong); }
@@ -491,15 +504,14 @@
 
   <div class="ticket" id="ticket">
     <div class="ticket-stub">
-      <div class="countdown-label" id="countdownLabel">試験まで</div>
+      <div class="countdown-label" id="countdownLabel">完了（日）</div>
       <div class="countdown-num" id="countdownNum">—</div>
-      <div class="stub-meta" id="examDateLabel">2026-08-09 実施</div>
+      <div class="stub-meta" id="examDateLabel">全20日間</div>
     </div>
     <div class="ticket-divider"></div>
     <div class="ticket-stub">
-      <div class="countdown-label">今日</div>
-      <div class="stub-title" id="todayDateLabel">—</div>
-      <div class="stub-meta" id="dayOfPlanLabel">—</div>
+      <div class="countdown-label">現在</div>
+      <div class="stub-title" id="dayOfPlanLabel">—</div>
       <div class="phase-pill" id="phasePill">—</div>
     </div>
   </div>
@@ -593,37 +605,80 @@
 
 <script>
 (function () {
-  var PLAN_START = '2026-07-20';
-  var EXAM_DATE = '2026-08-09';
   var STORAGE_KEY = 'eiken-pre1-writing-progress-v1';
+  var ASSIGN_KEY = 'eiken-pre1-writing-assign-v1';
 
   var topics = [
-    { en: 'Agree or disagree: Japanese companies should hire more workers from overseas', points: ['Aging society','Communication','Economy','Work culture'] },
-    { en: 'Should university education in Japan be free?', points: ['Cost','Equal opportunity','Quality of education','Taxes'] },
-    { en: 'Agree or disagree: Remote work will become the norm in the future', points: ['Productivity','Work-life balance','Communication','Technology'] },
-    { en: 'Should the government do more to protect the environment?', points: ['Climate change','Economic growth','International cooperation','Individual responsibility'] },
-    { en: 'Is it acceptable for parents to give smartphones to elementary school children?', points: ['Safety','Education','Health','Social skills'] },
-    { en: 'Agree or disagree: Cash will disappear in the near future', points: ['Convenience','Security','Elderly people','Technology'] },
-    { en: 'Should companies be required to reduce the use of plastic?', points: ['Environment','Cost','Consumer behavior','Alternatives'] },
-    { en: 'Agree or disagree: Artificial intelligence will have a positive effect on society', points: ['Employment','Efficiency','Creativity','Privacy'] },
-    { en: 'Should Japan rely more on renewable energy?', points: ['Environment','Cost','Energy security','Technology'] },
-    { en: 'Agree or disagree: Studying abroad is worth the cost', points: ['Language skills','Career','Cost','Independence'] },
-    { en: 'Should the retirement age in Japan be raised?', points: ['Aging society','Health','Younger workers','Pension system'] },
-    { en: 'Agree or disagree: Online learning is as effective as classroom learning', points: ['Motivation','Access','Cost','Social interaction'] },
-    { en: 'Should more be done to encourage people to live in rural areas?', points: ['Aging communities','Job opportunities','Quality of life','Technology'] },
-    { en: 'Agree or disagree: Convenience stores should stop operating 24 hours a day', points: ['Worker shortage','Consumer needs','Energy','Safety'] },
-    { en: 'Is space exploration worth the investment?', points: ['Scientific progress','Cost','International cooperation','Environment'] },
-    { en: 'Agree or disagree: Children today have too many extracurricular activities', points: ['Free time','Skills','Stress','Family finances'] },
-    { en: 'Agree or disagree: Fast fashion should be regulated more strictly', points: ['Environment','Cost','Labor conditions','Consumer choice'] },
-    { en: 'Should Japan increase the number of national holidays?', points: ['Work-life balance','Economy','Tourism','Productivity'] },
-    { en: 'Agree or disagree: Social media does more harm than good to teenagers', points: ['Mental health','Communication','Education','Safety'] }
+    { en: 'Should schools ban the use of smartphones during school hours?', points: ['Concentration','Safety','Communication','Bullying'] },
+    { en: 'Agree or disagree: Genetic testing for diseases should be widely available to the public', points: ['Health','Cost','Privacy','Insurance'] },
+    { en: 'Should Japan introduce a four-day workweek?', points: ['Productivity','Work-life balance','Businesses','Economy'] },
+    { en: 'Is it better for people to keep working past the traditional retirement age?', points: ['Health','Income','Younger workers','Skills'] },
+    { en: 'Agree or disagree: Zoos should be abolished', points: ['Animal welfare','Education','Conservation','Entertainment'] },
+    { en: 'Should advertising junk food to children be banned?', points: ['Health','Obesity','Businesses','Parental responsibility'] },
+    { en: 'Is nuclear power a necessary part of Japan’s energy future?', points: ['Safety','Cost','Environment','Energy security'] },
+    { en: 'Agree or disagree: Museums and art galleries should offer free admission', points: ['Access','Funding','Education','Tourism'] },
+    { en: 'Should companies be allowed to monitor employees working from home?', points: ['Privacy','Productivity','Trust','Security'] },
+    { en: 'Agree or disagree: Children learn better in private schools than in public schools', points: ['Class size','Cost','Teacher quality','Facilities'] },
+    { en: 'Agree or disagree: Self-driving cars will make roads safer', points: ['Technology','Human error','Cost','Regulation'] },
+    { en: 'Should Japan accept more refugees from other countries?', points: ['Humanitarian duty','Labor shortage','Culture','Public safety'] },
+    { en: 'Is a cashless society a disadvantage for elderly people?', points: ['Convenience','Security','Technology','Accessibility'] },
+    { en: 'Agree or disagree: Video games have educational value', points: ['Problem-solving','Addiction','Social skills','Violence'] },
+    { en: 'Should the voting age in Japan be lowered to 16?', points: ['Political awareness','Maturity','Education','Representation'] },
+    { en: 'Is tourism beneficial for local communities?', points: ['Economy','Environment','Culture','Overcrowding'] },
+    { en: 'Agree or disagree: Companies should offer employees unlimited paid leave', points: ['Productivity','Trust','Work culture','Abuse'] },
+    { en: 'Should animal testing be banned for cosmetic products?', points: ['Animal welfare','Safety','Alternatives','Innovation'] },
+    { en: 'Is working from home better for productivity than working at an office?', points: ['Focus','Communication','Commuting','Work-life balance'] },
+    { en: 'Agree or disagree: School uniforms should be abolished', points: ['Individuality','Cost','Discipline','Peer pressure'] },
+    { en: 'Should the government subsidize organic farming?', points: ['Environment','Cost','Food safety','Farmers’ income'] },
+    { en: 'Is social media beneficial for democracy?', points: ['Information access','Misinformation','Political participation','Polarization'] },
+    { en: 'Agree or disagree: Homework should be abolished in elementary schools', points: ['Academic performance','Free time','Family time','Stress'] },
+    { en: 'Should companies be required to disclose their environmental impact?', points: ['Transparency','Cost','Consumer choice','Regulation'] },
+    { en: 'Is space tourism a good use of resources?', points: ['Cost','Scientific progress','Environment','Inequality'] },
+    { en: 'Agree or disagree: Reading paper books is better than reading e-books', points: ['Concentration','Convenience','Cost','Environment'] },
+    { en: 'Should Japan increase immigration to address its labor shortage?', points: ['Economy','Culture','Public services','Wages'] },
+    { en: 'Is artificial intelligence a threat to job security?', points: ['Employment','Efficiency','New industries','Retraining'] },
+    { en: 'Agree or disagree: Fast food restaurants should be taxed more heavily', points: ['Health','Obesity','Businesses','Consumer choice'] },
+    { en: 'Should university students be required to study abroad?', points: ['Language skills','Cost','Independence','Career'] }
+  ];
+
+  var summaries = [
+    'Telemedicine refers to medical consultations conducted remotely through video calls or phone calls rather than in-person visits. Since the COVID-19 pandemic, its use has expanded rapidly around the world, and many hospitals and clinics now offer virtual appointments as a standard option for patients.\n\nOne major advantage of telemedicine is that it improves access to healthcare, especially for people living in rural areas or those with limited mobility. Patients no longer need to travel long distances or wait in crowded waiting rooms to see a doctor. Moreover, telemedicine can reduce the risk of spreading infectious diseases, since patients avoid unnecessary contact with others in hospitals. In fact, some healthcare providers report that video consultations can reduce average waiting times from several weeks to just a few days.\n\nHowever, some experts point out significant drawbacks. Doctors cannot perform physical examinations or certain tests remotely, which may lead to misdiagnosis in some cases. In addition, elderly patients or those unfamiliar with technology may struggle to use video-calling systems, potentially widening the gap in healthcare access rather than closing it. A recent survey found that nearly a quarter of patients over the age of 70 had difficulty completing a video appointment without assistance.',
+    'Vertical farming involves growing crops in stacked layers inside buildings, often using artificial lighting and controlled environments instead of traditional outdoor fields. As urban populations continue to grow and available farmland shrinks, more companies are turning to this technology to produce food closer to consumers.\n\nSupporters argue that vertical farms use significantly less water than conventional agriculture, since the water can be recycled within a closed system. Furthermore, because crops are grown indoors, they are protected from unpredictable weather and pests, which can lead to more stable year-round production regardless of the season. Some vertical farms report using up to 95 percent less water than traditional soil-based farming methods.\n\nOn the other hand, critics note that vertical farms require large amounts of electricity to power the lighting and climate-control systems, making the initial investment and running costs extremely high. Additionally, the range of crops that can be grown profitably is currently limited mostly to leafy greens and herbs, meaning vertical farms cannot yet replace traditional farming for staple foods like rice or wheat. Industry estimates suggest that the electricity costs of a typical vertical farm can account for nearly a third of its total operating expenses.',
+    'The gig economy refers to a labor market in which people work short-term or freelance jobs, often found through smartphone apps, rather than holding traditional full-time positions. Ridesharing drivers and food delivery couriers are common examples of gig workers, and this type of work has grown enormously over the past decade.\n\nProponents of the gig economy emphasize the flexibility it offers. Workers can choose their own hours and take on as much or as little work as they want, which is especially appealing to students and people with other responsibilities. Moreover, gig work can provide an accessible source of income for those who might otherwise struggle to find employment.\n\nHowever, critics argue that gig workers often lack basic protections such as health insurance, paid leave, and a guaranteed minimum wage, since companies frequently classify them as independent contractors rather than employees. In addition, income from gig work can be unpredictable, making it difficult for workers to plan their finances or qualify for loans. Studies indicate that many gig workers earn less than the minimum wage once expenses such as fuel and vehicle maintenance are taken into account.',
+    'Microplastics are tiny plastic particles, often smaller than five millimeters, that come from the breakdown of larger plastic waste or from products such as synthetic clothing and cosmetics. Over the past twenty years, growing amounts of microplastics have been detected in oceans around the world, raising concern among scientists and environmental groups.\n\nSome researchers focus on solutions to the problem, pointing to new filtration technologies that can capture microplastics before they enter waterways. Moreover, several countries have introduced regulations banning microbeads in cosmetic products, which has already reduced one major source of ocean pollution. New filtration systems installed at some wastewater treatment plants are now capable of removing over 90 percent of microplastic particles before water is released.\n\nNevertheless, many experts remain deeply worried about the long-term impact of microplastics. Marine animals frequently mistake these particles for food, and the plastics can accumulate in their bodies, eventually entering the human food chain through seafood. Furthermore, because microplastics break down so slowly, scientists warn that the pollution already present in the oceans will likely persist for many generations.',
+    'Universal basic income, or UBI, is a policy under which the government provides all citizens with a regular, unconditional cash payment regardless of their employment status or income level. Several countries and cities have run small-scale trials of UBI in recent years to study its effects on society.\n\nAdvocates argue that UBI could reduce poverty and provide a safety net as automation eliminates certain jobs. Moreover, because the payments come with no conditions, recipients are free to pursue education, start businesses, or care for family members without fear of losing government support. In a well-known trial conducted in Finland, participants who received a basic income reported improved mental well-being compared to a control group.\n\nCritics, however, contend that UBI would be extremely expensive to fund on a national scale and could require substantial tax increases. In addition, some worry that guaranteed income might reduce people’s motivation to work, potentially shrinking the overall labor force and slowing economic growth. Economists estimate that providing a modest basic income to every adult in a country the size of the United States could cost well over a trillion dollars annually.',
+    'As countries work to reduce greenhouse gas emissions, many governments have begun offering subsidies to encourage the development and adoption of renewable energy sources such as solar and wind power. These subsidies can take the form of tax credits, grants, or reduced electricity rates for renewable producers.\n\nSupporters of these subsidies argue that they are essential for making clean energy competitive with fossil fuels, which have historically been cheaper to produce. Moreover, subsidies can accelerate technological innovation by giving companies the financial stability to invest in research and development. In some countries, such subsidies have helped cut the cost of solar power by more than half over the past decade.\n\nOpponents, however, argue that such subsidies place a heavy burden on taxpayers and can distort the energy market by giving certain companies an unfair advantage. Additionally, critics claim that once subsidies end, some renewable energy projects may struggle to remain profitable without continued government support. Critics also point to cases where subsidized wind farms struggled to turn a profit once government support was gradually phased out after several years.',
+    'Online education has expanded dramatically in recent years, allowing students to take courses and even earn full degrees without ever entering a physical classroom. This shift has been driven by advances in technology as well as changing attitudes toward flexible learning.\n\nSupporters of online education highlight its convenience and accessibility. Students can learn at their own pace and schedule, which is particularly valuable for working adults or those living far from universities. Furthermore, online courses are often less expensive than traditional programs, since institutions save on facility and staffing costs. According to some estimates, online degree programs can cost up to 40 percent less than equivalent on-campus programs.\n\nCritics, however, argue that online learning lacks the face-to-face interaction that helps students develop communication skills and build relationships with peers and instructors. In addition, some students struggle with the self-discipline required to complete coursework without the structure of a physical classroom, which can lead to lower completion rates. Research also shows that completion rates for fully online courses are often significantly lower than those for traditional in-person classes.',
+    'Food delivery apps have transformed how people order meals, allowing customers to have food from restaurants brought directly to their homes within minutes. Behind this convenience, however, is a large workforce of delivery couriers whose working conditions have become a subject of public debate.\n\nFrom the company’s perspective, these apps create flexible earning opportunities and boost sales for restaurants that might otherwise struggle to reach customers. Moreover, consumers benefit from a wider variety of food choices and the convenience of not having to cook or leave home. During the pandemic, many small restaurants said delivery apps allowed them to stay in business even when dine-in service was not permitted.\n\nOn the other hand, labor advocates point out that many delivery couriers receive low pay per delivery and lack benefits such as health insurance or paid sick leave. In addition, couriers often face safety risks while rushing to make deliveries on time, particularly when using bicycles or motorcycles in heavy traffic or bad weather. Surveys of couriers in several major cities found that a significant number earn less than their local minimum wage after accounting for fuel and equipment costs.',
+    'As more countries and private companies launch satellites into orbit, the amount of space debris circling the Earth has grown substantially. This debris includes discarded rocket parts, defunct satellites, and fragments from past collisions, all traveling at extremely high speeds.\n\nSome experts are optimistic that new technologies can address the problem. Companies are developing specialized spacecraft designed to capture and remove debris from orbit, and international guidelines now encourage satellite operators to deorbit their equipment safely once its mission ends. Some companies have already tested robotic arms and nets designed to grab defunct satellites and pull them back into the atmosphere to burn up safely.\n\nNevertheless, many scientists warn that the risk is growing faster than solutions can keep pace. A collision between two objects can create thousands of new fragments, increasing the danger to functioning satellites and even to astronauts aboard spacecraft. Furthermore, with thousands of new satellites planned for launch in the coming years, experts fear that orbital congestion could soon threaten the long-term usability of space. Experts note that the number of tracked objects in orbit has more than tripled over the past fifteen years.',
+    'Genetically modified, or GM, crops are plants whose DNA has been altered in a laboratory to give them specific traits, such as resistance to pests or tolerance to drought. Since their introduction in the 1990s, GM crops have become widespread in countries such as the United States and Brazil.\n\nSupporters argue that GM crops can increase food production and help farmers cope with challenges such as climate change and pest outbreaks. Moreover, some GM crops require fewer pesticides, which can reduce both farming costs and environmental damage. In some regions, farmers using GM cotton have reported yield increases of over 20 percent compared to conventional varieties.\n\nCritics, however, remain concerned about the long-term health and environmental effects of GM crops, arguing that not enough research has been conducted to guarantee their safety. In addition, some worry that a small number of large corporations control the seed patents for most GM crops, giving them excessive influence over global food production and putting small farmers at a disadvantage. Surveys also show that public trust in GM food remains notably lower in parts of Europe than in North America.',
+    'The rise of remote work has allowed many employees to live far from their company’s office, and some see this as an opportunity to reverse the long-standing trend of people moving from rural areas to big cities. Local governments in depopulated regions have begun offering incentives to attract remote workers.\n\nAdvocates argue that remote workers bring new income and energy to struggling rural communities, helping to support local businesses and slow population decline. Moreover, employees who move to rural areas often report a better quality of life, with lower living costs and closer access to nature. Some small towns offering cash incentives to remote workers have reported a modest but noticeable increase in population over the past few years.\n\nHowever, skeptics point out that rural areas often lack the high-speed internet infrastructure necessary for reliable remote work, which limits how many people can actually relocate. In addition, critics note that most companies offering remote work are concentrated in cities, so job opportunities for those already living in rural areas remain limited.',
+    'Cryptocurrencies such as Bitcoin have grown from a niche technology into a major part of the global financial system, with millions of people now investing in or using digital currencies. As their popularity has increased, governments around the world have debated how much regulation to impose on this new market. Some estimates suggest that hundreds of millions of people worldwide now hold some form of cryptocurrency.\n\nThose in favor of stricter regulation argue that it would protect consumers from fraud and extreme price volatility, both of which have caused significant financial losses for inexperienced investors. Moreover, regulation could help prevent cryptocurrencies from being used for illegal activities such as money laundering. In recent years, fraud related to cryptocurrency has cost investors billions of dollars worldwide, according to some financial watchdogs.\n\nOpponents, however, argue that heavy regulation could stifle innovation in a rapidly developing industry and drive cryptocurrency businesses to relocate to countries with more relaxed rules. Additionally, some supporters of cryptocurrency value its decentralized nature, arguing that government oversight goes against the original purpose of removing control from central authorities.',
+    'In an effort to reduce plastic pollution, many countries and cities have introduced bans or fees on single-use plastic shopping bags in recent years. Consumers are now often required to bring their own reusable bags or pay an extra charge at checkout.\n\nSupporters of these bans point to a noticeable reduction in plastic waste found in streets, rivers, and oceans after such policies are implemented. Moreover, the bans encourage consumers to develop more sustainable shopping habits, such as regularly using durable reusable bags instead of disposable ones. In some cities, plastic bag litter along coastlines dropped by more than 40 percent within just a few years of introducing a ban.\n\nCritics, however, argue that reusable bags, particularly those made of cotton, require significant resources to produce and must be used many times before they become more environmentally friendly than plastic bags. In addition, some small business owners claim that bag fees discourage customers from making purchases, slightly hurting their sales. Researchers note that a cotton tote bag may need to be reused over a hundred times before it becomes more environmentally friendly than a single-use plastic bag.',
+    'Autonomous, or self-driving, vehicles use sensors and artificial intelligence to navigate roads with little or no human input. Several companies are now testing these vehicles on public roads, and some countries have begun allowing limited commercial use.\n\nProponents argue that autonomous vehicles could dramatically reduce traffic accidents, since the majority of crashes are currently caused by human error such as distraction or fatigue. Moreover, self-driving technology could improve mobility for elderly or disabled individuals who are unable to drive themselves. Some studies estimate that human error is responsible for more than 90 percent of all traffic accidents.\n\nCritics, however, point to several high-profile accidents involving autonomous vehicles, arguing that the technology is not yet reliable enough for widespread use, particularly in complex urban environments. In addition, questions remain about who should be held legally responsible when a self-driving car causes an accident, creating uncertainty for both regulators and consumers. Several accidents involving autonomous vehicles have already led to lawsuits, and courts in some countries have yet to establish clear rules on liability.',
+    'In recent years, a growing number of companies and even some national governments have experimented with reducing the standard workweek from five days to four, without cutting employees’ pay. These trials have attracted attention as a possible solution to worker burnout.\n\nSupporters of the four-day workweek cite research showing that employees who worked fewer days reported higher job satisfaction and lower stress levels, without any measurable decline in productivity. Moreover, some companies found that a shorter week helped them attract and retain talented employees in a competitive job market. In one large trial involving dozens of companies, the vast majority chose to continue the shortened schedule even after the trial period ended.\n\nSkeptics, however, argue that a four-day workweek is not practical for every industry, particularly in sectors such as healthcare or retail that require constant staffing. In addition, some economists worry that reducing working hours across an entire economy could lower overall output and hurt smaller businesses that cannot easily adjust their operations. Economists caution that industries with fixed operating hours, such as hospitals, may struggle to reduce hours without hiring significantly more staff.',
+    'After decades of declining public support following incidents such as the Fukushima disaster, nuclear energy has recently seen renewed interest from governments seeking reliable, low-carbon sources of electricity. Several countries have announced plans to build new nuclear reactors in the coming years.\n\nSupporters argue that nuclear power produces a large, stable supply of electricity without emitting the greenhouse gases associated with fossil fuels, making it a key tool in the fight against climate change. Moreover, modern reactor designs are said to be significantly safer than those built decades ago. Newer reactor designs are said to include multiple passive safety systems that can shut the reactor down automatically without human intervention.\n\nOpponents, however, remain concerned about the risk of accidents and the unresolved problem of safely storing radioactive waste for thousands of years. In addition, building new nuclear plants requires enormous upfront investment and many years of construction, leading critics to argue that the money would be better spent on faster-to-build renewable energy projects. Some nuclear waste is expected to remain radioactive for tens of thousands of years, and no country has yet completed a permanent underground storage facility.',
+    'Fast fashion refers to the business model of quickly producing large quantities of trendy, inexpensive clothing to keep up with rapidly changing styles. While this model has made fashionable clothing widely accessible, it has also drawn increasing criticism from environmental groups.\n\nFrom a business perspective, fast fashion allows consumers, particularly those on tight budgets, to update their wardrobes frequently without spending large amounts of money. Moreover, the industry provides millions of manufacturing jobs in developing countries, contributing significantly to their economies. The industry is estimated to employ tens of millions of garment workers worldwide, many of them in developing countries in Asia.\n\nHowever, environmentalists point out that fast fashion generates enormous amounts of textile waste, as cheaply made clothes are often discarded after only a few wears. In addition, the industry consumes vast quantities of water and relies heavily on synthetic fibers derived from fossil fuels, making it one of the most polluting industries in the world. Environmental groups estimate that the fashion industry accounts for roughly 10 percent of global carbon emissions, more than international flights and shipping combined.',
+    'Many companies have begun using artificial intelligence to screen job applications, analyzing resumes and even conducting initial video interviews before a human recruiter becomes involved. This technology promises to make the hiring process faster and more efficient.\n\nSupporters argue that AI can process thousands of applications in a fraction of the time it would take human staff, allowing companies to respond to candidates more quickly. Moreover, proponents claim that AI can reduce unconscious human bias by evaluating candidates based on standardized criteria rather than subjective impressions. Some companies report that AI screening tools have cut the time needed to fill open positions by more than half.\n\nCritics, however, warn that AI hiring systems can actually reinforce existing biases if they are trained on historical data that reflects past discrimination. In addition, some qualified candidates may be unfairly rejected because their resumes do not match the exact keywords the algorithm is programmed to search for. In one widely reported case, a major technology company abandoned its AI hiring tool after discovering it consistently favored male candidates over equally qualified women.',
+    'As populations in many developed countries age rapidly, some companies and researchers have turned to robotics to help address the growing shortage of caregivers for elderly people. These robots can assist with tasks ranging from reminding patients to take medication to providing physical support for mobility.\n\nSupporters argue that robot caregivers could relieve pressure on overworked human caregivers and allow elderly people to remain living independently for longer. Moreover, robots do not experience fatigue, meaning they can provide consistent, round-the-clock assistance without a decline in performance. In Japan, where the population is aging especially quickly, several nursing homes have already introduced robots to assist staff with lifting and monitoring patients.\n\nCritics, however, worry that relying on robots could increase social isolation among elderly people, who may benefit more from genuine human interaction and emotional connection. In addition, the high cost of advanced caregiving robots currently makes them inaccessible to many families who need this kind of support the most. Surveys of elderly users suggest that satisfaction with robot caregivers tends to be lower among those who live alone and have less regular contact with family.',
+    'As climate change and population growth put increasing pressure on freshwater supplies, many regions around the world are turning to desalination, the process of removing salt from seawater to make it drinkable, as a potential solution to water scarcity.\n\nSupporters point out that desalination provides a reliable water source that does not depend on rainfall, making it especially valuable for coastal countries in dry climates. Moreover, advances in technology have gradually reduced the cost of desalination over the past two decades. The largest desalination plants can now produce hundreds of millions of liters of drinking water per day, supplying entire cities in some dry regions.\n\nCritics, however, note that desalination plants consume enormous amounts of energy, which can increase greenhouse gas emissions unless powered by renewable sources. In addition, the process produces a highly concentrated saltwater byproduct that, if not managed carefully, can harm marine ecosystems when released back into the ocean. Some marine biologists have documented declines in local sea life near desalination outlets where the concentrated saltwater was released without proper dilution.',
+    'Competitive video gaming, known as e-sports, has grown into a global industry, with professional players, large audiences, and prize pools that rival those of traditional sports. This growth has sparked debate over whether e-sports should be recognized as a legitimate sport.\n\nSupporters argue that e-sports require the same qualities as traditional sports, including quick reflexes, strategic thinking, and extensive practice, and that professional players train as rigorously as traditional athletes. Moreover, e-sports have introduced sports culture to a new generation of fans who might not otherwise engage with competitive events. The largest e-sports tournaments now offer prize pools worth tens of millions of dollars and attract online audiences comparable to those of major traditional sporting events.\n\nCritics, however, argue that e-sports lack the physical exertion that defines traditional sports and that classifying them the same way could dilute the meaning of the term. In addition, some worry that promoting e-sports could encourage unhealthy amounts of screen time among young people, contributing to physical inactivity. Health experts have also raised concerns about the long hours of practice required, which can exceed eight hours a day for top professional players.',
+    'Palm oil is one of the most widely used vegetable oils in the world, found in everything from food products to cosmetics. However, the rapid expansion of palm oil plantations, particularly in Southeast Asia, has become a major driver of tropical deforestation.\n\nProducers argue that palm oil is actually more land-efficient than alternative vegetable oils, since oil palm trees yield significantly more oil per hectare than crops such as soybeans. Moreover, the industry provides crucial income for millions of farmers and workers in developing economies. Palm oil plantations produce roughly four to ten times more oil per hectare than crops such as soybean or sunflower.\n\nEnvironmental groups, however, warn that clearing rainforests for palm oil plantations destroys critical habitats for endangered species such as orangutans and releases large amounts of stored carbon into the atmosphere. In addition, the loss of forest cover can disrupt local rainfall patterns, threatening the very agricultural systems that communities depend on. Conservation groups estimate that palm oil expansion has contributed to the loss of millions of hectares of rainforest across Indonesia and Malaysia over the past few decades.',
+    'As urban populations continue to grow worldwide, many cities have turned to constructing tall residential towers to accommodate more people within limited land area. This approach to housing has become especially common in densely populated Asian cities.\n\nSupporters argue that vertical housing allows cities to house large populations efficiently while preserving surrounding land for parks, farmland, or green space. Moreover, concentrating residents in tall buildings can make public transportation and infrastructure more cost-effective to provide. Some of the tallest residential towers now house thousands of people within a single building, allowing cities to accommodate growing populations without expanding outward.\n\nCritics, however, argue that high-density living can negatively affect residents’ mental health, citing research linking tall housing with feelings of isolation, especially among children who have limited access to outdoor play areas. In addition, some worry that rapid vertical development can overwhelm local infrastructure, such as roads and schools, that was not originally designed for such a large population. A number of studies conducted in East Asian cities have found a correlation between living above a certain floor and reduced opportunities for children to play outdoors.',
+    'Several companies have begun testing drone delivery services, using small unmanned aircraft to transport packages directly to customers’ homes within minutes of an order being placed. This technology promises to revolutionize how goods are delivered, particularly in suburban and rural areas.\n\nSupporters argue that drone delivery could dramatically reduce delivery times and traffic congestion caused by delivery trucks, while also lowering carbon emissions compared to traditional vehicles. Moreover, drones could provide faster access to essential goods, such as medicine, for people in remote locations. In trial programs, some companies have successfully delivered small packages, including medical supplies, in under thirty minutes even to remote rural areas.\n\nCritics, however, raise concerns about noise pollution and privacy, since drones equipped with cameras could potentially capture images of people’s homes and property without consent. In addition, regulators worry about the safety risks of widespread drone use, including the possibility of collisions with aircraft or accidents caused by mechanical failure. Aviation regulators in several countries have delayed approving widespread drone delivery until clearer safety rules are established for sharing airspace with other aircraft.',
+    'Smartphone apps designed to teach foreign languages have become enormously popular, with millions of users worldwide practicing vocabulary and grammar through short daily lessons. This has raised questions about whether such apps can replace traditional classroom instruction.\n\nSupporters of language apps highlight their convenience and affordability, allowing users to study at their own pace anytime and anywhere, often at a fraction of the cost of formal classes. Moreover, many apps use gamification, such as points and streaks, to keep users motivated to practice consistently. Some of the most popular language apps now report hundreds of millions of downloads worldwide, making them far more accessible than formal language classes in many countries.\n\nCritics, however, argue that apps cannot fully replicate the conversational practice and immediate feedback that a classroom environment with a live teacher provides. In addition, some language experts note that most app users fail to reach conversational fluency, since apps typically emphasize vocabulary memorization over real communication skills. Independent research has found that only a small percentage of long-term app users ever reach a level of fluency sufficient for real conversation.',
+    'Carbon capture technology involves collecting carbon dioxide emissions directly from factories or power plants before they enter the atmosphere, then storing the gas underground or using it in industrial processes. This technology is increasingly seen as a tool in the fight against climate change.\n\nSupporters argue that carbon capture allows industries that are difficult to decarbonize, such as cement and steel production, to continue operating while significantly reducing their environmental impact. Moreover, some companies have found ways to convert captured carbon into useful products, creating new economic opportunities. Several large-scale carbon capture facilities are now operating around the world, together capturing millions of tons of carbon dioxide each year.\n\nCritics, however, contend that carbon capture technology remains expensive and has not yet been proven effective at the scale needed to make a meaningful difference. In addition, some environmentalists worry that investing heavily in carbon capture could distract from the more urgent priority of transitioning away from fossil fuels entirely. According to some estimates, current global carbon capture capacity accounts for less than one percent of the emissions reductions needed to meet international climate targets.',
+    'Overtourism refers to a situation in which an excessive number of visitors overwhelms a popular destination, straining local infrastructure and negatively affecting residents’ quality of life. Cities such as Venice and Barcelona have become well-known examples of this growing problem.\n\nFrom an economic perspective, tourism generates substantial revenue and creates jobs in local hotels, restaurants, and shops, making it a vital part of many regional economies. Moreover, tourism can promote cultural exchange and increase global awareness of a destination’s history and heritage. Tourism now accounts for more than 10 percent of the global economy and supports hundreds of millions of jobs worldwide.\n\nLocal residents, however, often complain that overtourism drives up housing costs, as property owners convert apartments into short-term vacation rentals. In addition, the sheer volume of visitors can damage fragile historical sites and natural environments, threatening the very attractions that draw tourists in the first place. In response, some cities have begun limiting the number of short-term vacation rental permits issued each year in an effort to protect long-term housing supply.',
+    'Lab-grown meat, also known as cultivated meat, is produced by growing animal cells in a laboratory rather than raising and slaughtering livestock. Several companies have received regulatory approval to sell this product in recent years, positioning it as a potential alternative to conventional meat.\n\nSupporters argue that lab-grown meat could dramatically reduce the environmental impact of meat production, since traditional livestock farming requires vast amounts of land, water, and generates significant greenhouse gas emissions. Moreover, this technology could eliminate the ethical concerns associated with raising and killing animals for food. Proponents note that producing lab-grown meat could require up to 90 percent less land than raising cattle, according to some early research.\n\nCritics, however, point out that producing lab-grown meat at a large scale remains extremely expensive, making it currently unaffordable for most consumers. In addition, some people express skepticism about consuming meat grown in a laboratory, questioning its long-term safety and finding the concept unappealing regardless of its potential benefits. The first commercially available lab-grown meat products were sold at prices far higher than conventional meat, though companies say costs are gradually falling as production scales up.',
+    'In response to concerns about widespread consumer debt and inadequate retirement savings, some countries have begun requiring schools to teach financial literacy, including topics such as budgeting, taxes, and investing, as part of the standard curriculum.\n\nSupporters argue that teaching these practical skills early prepares students to make informed financial decisions throughout their lives, potentially reducing rates of debt and bankruptcy in the future. Moreover, proponents claim that financial literacy education could help address economic inequality by giving all students, regardless of family background, access to essential knowledge. Studies in some countries where financial literacy is mandatory have found that graduates carry lower average credit card debt than those from schools without such programs.\n\nCritics, however, argue that already crowded school curriculums leave little room for an additional mandatory subject, potentially forcing schools to reduce time spent on other important subjects. In addition, some educators question whether teenagers can truly grasp complex financial concepts before they have real-world experience managing their own money. Some teachers report that fitting a new mandatory subject into an already packed schedule often means reducing time spent on other subjects, such as art or physical education.',
+    'Congestion pricing is a policy in which drivers are charged a fee to enter designated zones in a city center, typically during peak traffic hours. Cities such as London and Singapore have implemented this system for years, and other major cities are now considering similar measures.\n\nSupporters argue that congestion pricing effectively reduces traffic jams and air pollution by encouraging drivers to use public transportation instead of private vehicles. Moreover, the revenue collected from these fees can be reinvested into improving public transit systems, creating a cycle of continued improvement. After introducing congestion pricing, London reported a significant drop in traffic volume within the charging zone during the first few years of the program.\n\nCritics, however, argue that congestion pricing unfairly burdens lower-income drivers who cannot easily switch to public transportation, particularly those without convenient access to buses or trains. In addition, some business owners worry that charging drivers to enter city centers could discourage customers from visiting shops and restaurants, hurting local commerce. Small business owners in some affected areas have reported a decline in customer visits, though city officials argue that improved public transit has offset much of this effect.'
   ];
 
   var phaseInfo = {
     phase1: { label: '型を固める', short: '型', note: 'テンプレを見ながらでOK。今日中に型を体に入れる。' },
     phase2: { label: '量をこなす', short: '量', note: '型を見ずに書く。書いたら必ず添削まで終わらせる。' },
     phase3: { label: '本番仕上げ', short: '仕上げ', note: '本番形式：論述25分→休憩なしで要約20分を続けて解く。' },
-    review: { label: '前日調整', short: '前日', note: '新しいことはやらない。テンプレとミスノートの確認だけ。' }
+    review: { label: 'まとめの日', short: 'まとめ', note: '新しいことはやらない。テンプレとミスノートの確認だけ。' }
   };
 
   var dayNotes = {
@@ -635,39 +690,67 @@
     9: '過去に添削したエッセイを1本、書き直してみる（同じミスをしていないか確認）。',
     12: 'また書き直しの日。3日に1回のペースで過去のエッセイを見直す。',
     15: 'ここから本番形式。論述25分→そのまま要約20分、休憩なしで続けて解く。',
-    20: '前日。新しいトピックはやらない。テンプレと自分のミスノートだけ見返す。'
+    20: '20日サイクルの最終日。新しいトピックはやらない。テンプレと自分のミスノートだけ見返す。'
   };
 
   function buildPlan() {
-    var start = new Date(PLAN_START + 'T00:00:00');
     var plan = [];
     for (var i = 0; i < 20; i++) {
-      var d = new Date(start.getTime() + i * 86400000);
       var dayNum = i + 1;
       var phase = dayNum <= 5 ? 'phase1' : dayNum <= 14 ? 'phase2' : dayNum <= 19 ? 'phase3' : 'review';
       plan.push({
         day: dayNum,
-        dateStr: fmtISO(d),
-        dateObj: d,
         phase: phase,
-        topic: dayNum <= 19 ? topics[dayNum - 1] : null,
         note: dayNotes[dayNum] || null
       });
     }
     return plan;
   }
 
-  function fmtISO(d) {
-    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  // お題（意見論述・要約）の割り当て。日付ではなく進捗ベースで管理する。
+  // 各DAYにプール内のindexを割り振り、「別のお題にする」で未使用の別indexに差し替えられる。
+  function loadAssign() {
+    var a = {};
+    try { a = JSON.parse(localStorage.getItem(ASSIGN_KEY) || '{}'); } catch (e) { a = {}; }
+    var usedTopic = {}, usedSummary = {};
+    for (var k in a) {
+      if (a[k] && typeof a[k].topicIdx === 'number') usedTopic[a[k].topicIdx] = true;
+      if (a[k] && typeof a[k].summaryIdx === 'number') usedSummary[a[k].summaryIdx] = true;
+    }
+    for (var i = 1; i <= 19; i++) {
+      if (!a[i]) a[i] = {};
+      if (typeof a[i].topicIdx !== 'number' || a[i].topicIdx >= topics.length) {
+        var ti = pickUnused(usedTopic, topics.length, i - 1);
+        a[i].topicIdx = ti >= 0 ? ti : (i - 1) % topics.length;
+        usedTopic[a[i].topicIdx] = true;
+      }
+      if (typeof a[i].summaryIdx !== 'number' || a[i].summaryIdx >= summaries.length) {
+        var si = pickUnused(usedSummary, summaries.length, i - 1);
+        a[i].summaryIdx = si >= 0 ? si : (i - 1) % summaries.length;
+        usedSummary[a[i].summaryIdx] = true;
+      }
+    }
+    return a;
   }
-  function pad(n) { return n < 10 ? '0' + n : '' + n; }
-  function fmtJP(d) {
-    var w = ['日','月','火','水','木','金','土'][d.getDay()];
-    return (d.getMonth() + 1) + '月' + d.getDate() + '日（' + w + '）';
+  // 未使用（usedMapに立っていない）のindexを探す。見つからなければ -1。
+  function pickUnused(usedMap, poolSize, preferIdx) {
+    if (preferIdx < poolSize && !usedMap[preferIdx]) return preferIdx;
+    for (var i = 0; i < poolSize; i++) { if (!usedMap[i]) return i; }
+    return -1;
   }
-  function todayMidnight() {
-    var n = new Date();
-    return new Date(n.getFullYear(), n.getMonth(), n.getDate());
+  function saveAssign() {
+    try { localStorage.setItem(ASSIGN_KEY, JSON.stringify(assign)); } catch (e) {}
+    schedulePush();
+  }
+  function swapAssign(day, field, poolSize) {
+    var used = {};
+    for (var k in assign) { if (assign[k] && typeof assign[k][field] === 'number') used[assign[k][field]] = true; }
+    // used には自分の現在値も含めたままにする＝「元と同じお題」には戻らないようにする
+    var cur = assign[day][field];
+    var next = pickUnused(used, poolSize, (cur + 1) % poolSize);
+    if (next < 0 || next === cur) return; // 空きがもうない（プール全消化）。差し替えずそのまま
+    assign[day][field] = next;
+    saveAssign();
   }
 
   function loadProgress() {
@@ -782,7 +865,7 @@
     fetch(SUPABASE_URL + '/rest/v1/writing_sync?on_conflict=sync_code', {
       method: 'POST',
       headers: supaHeaders({ 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
-      body: JSON.stringify({ sync_code: syncCode, payload: { progress: progress, data: data } })
+      body: JSON.stringify({ sync_code: syncCode, payload: { progress: progress, data: data, assign: assign } })
     }).then(function (r) {
       if (r.ok) { lastSyncedAt = new Date(); updateSyncUI(); }
     }).catch(function () {});
@@ -871,11 +954,25 @@
   }
 
   var plan = buildPlan();
-  var today = todayMidnight();
-  var examDate = new Date(EXAM_DATE + 'T00:00:00');
   var progress = loadProgress();
   var data = loadData();
+  var assign = loadAssign();
   var activeTimers = [];
+
+  function currentDayNum() {
+    for (var i = 1; i <= 20; i++) { if (!progress[i]) return i; }
+    return null; // 全部完了
+  }
+  function entryFor(dayNum) {
+    var e = plan[dayNum - 1];
+    if (!e) return null;
+    var out = { day: e.day, phase: e.phase, note: e.note, topic: null, summaryText: null };
+    if (dayNum <= 19) {
+      out.topic = topics[assign[dayNum].topicIdx];
+      out.summaryText = summaries[assign[dayNum].summaryIdx];
+    }
+    return out;
+  }
 
   function clearTimers() {
     for (var i = 0; i < activeTimers.length; i++) {
@@ -886,37 +983,23 @@
 
   function render() {
     clearTimers();
-    var msPerDay = 86400000;
-    var daysToExam = Math.round((examDate - today) / msPerDay);
+    var doneCount = 0;
+    for (var k in progress) { if (progress[k]) doneCount++; }
+    var curDay = currentDayNum();
 
-    document.getElementById('countdownNum').textContent = daysToExam >= 0 ? daysToExam : 0;
-    document.getElementById('countdownLabel').textContent = daysToExam > 0 ? '試験まで（日）' : daysToExam === 0 ? '本番当日' : '試験終了';
-    document.getElementById('examDateLabel').textContent = '2026-08-09（日）実施';
-    document.getElementById('todayDateLabel').textContent = fmtJP(today);
-
-    var todayEntry = null;
-    for (var i = 0; i < plan.length; i++) { if (plan[i].dateStr === fmtISO(today)) { todayEntry = plan[i]; break; } }
+    document.getElementById('countdownNum').textContent = doneCount;
+    document.getElementById('countdownLabel').textContent = '完了（日）';
+    document.getElementById('examDateLabel').textContent = '全20日間';
 
     var mainArea = document.getElementById('mainArea');
     mainArea.innerHTML = '';
 
-    if (daysToExam === 0) {
-      document.getElementById('dayOfPlanLabel').textContent = 'EXAM DAY';
-      document.getElementById('phasePill').textContent = '本番当日';
-      mainArea.appendChild(bigMessage('本番当日。ここまでやってきた分だけ、書ける。', 'ライティングから解く作戦も有効 — 頭が疲れる前に得点源を確保できる。落ち着いて、型どおりに書こう。'));
-    } else if (daysToExam < 0) {
-      document.getElementById('dayOfPlanLabel').textContent = '—';
-      document.getElementById('phasePill').textContent = '試験終了';
-      mainArea.appendChild(bigMessage('お疲れ様でした。', '結果を待ちつつ、書けなかったところは記録しておくと次に効く。'));
-    } else if (!todayEntry) {
-      var beforeStart = today < plan[0].dateObj;
-      document.getElementById('dayOfPlanLabel').textContent = '—';
-      document.getElementById('phasePill').textContent = beforeStart ? '開始前' : '計画外';
-      mainArea.appendChild(bigMessage(
-        beforeStart ? '特訓開始まであと少し。' : 'この日は計画の範囲外。',
-        beforeStart ? ('7月20日から20日間の計画がスタートする。') : ''
-      ));
+    if (curDay === null) {
+      document.getElementById('dayOfPlanLabel').textContent = 'ALL DONE';
+      document.getElementById('phasePill').textContent = '特訓完了';
+      mainArea.appendChild(bigMessage('お疲れ様でした。20日間の特訓、完走です。', 'このまま止めるのはもったいない。「別のお題にする」で新しいトピックに差し替えれば、続けて練習できる。'));
     } else {
+      var todayEntry = entryFor(curDay);
       document.getElementById('dayOfPlanLabel').textContent = 'DAY ' + todayEntry.day + ' / 20';
       var pill = document.getElementById('phasePill');
       pill.textContent = phaseInfo[todayEntry.phase].label;
@@ -955,7 +1038,7 @@
 
     var head = document.createElement('div');
     head.className = 'section-head';
-    head.innerHTML = '<h2>今日のタスク</h2><div class="section-sub">' + fmtJP(entry.dateObj) + '</div>';
+    head.innerHTML = '<h2>今日のタスク</h2><div class="section-sub">DAY ' + entry.day + '</div>';
     frag.appendChild(head);
 
     if (entry.phase === 'review') {
@@ -964,7 +1047,7 @@
       var b = document.createElement('div');
       b.className = 'task-body';
       b.innerHTML =
-        '<div class="task-top"><div class="task-name">前日調整</div></div>' +
+        '<div class="task-top"><div class="task-name">まとめの日</div></div>' +
         '<div class="task-hint">' + phaseInfo.review.note + '</div>' +
         '<div class="task-note">新しいトピックには手を出さない。「型・表現をおさらいする」を開いて、テンプレと表現をもう一度目に通すだけで十分。</div>';
       card.appendChild(b);
@@ -992,7 +1075,7 @@
         'この英作文を英検準1級の採点基準（内容・構成・語彙・文法の4観点、各4点＝16点満点）で採点してください。' +
         '各観点の点数、具体的な改善点トップ3、そして自然な修正例も教えてください。\n\n--- 解答 ---\n' + body;
     }
-    return '以下は英検準1級ライティング「英文要約」の解答です（要約の元になった英文は、この会話ですでに出したものを参照してください）。\n' +
+    return '以下は英検準1級ライティング「英文要約」の解答です。\n\n--- 元の英文 ---\n' + entry.summaryText + '\n\n' +
       'この要約を英検準1級の採点基準（内容・構成・語彙・文法の4観点、各4点＝16点満点）で採点してください。' +
       '各観点の点数、具体的な改善点トップ3、そして60〜70語の模範要約も教えてください。\n\n--- 解答 ---\n' + body;
   }
@@ -1054,16 +1137,18 @@
         '<div class="topic-en">' + escapeHtml(t.en) + '</div>' +
         '<div class="points-row">' + t.points.map(function (p) { return '<span class="point-chip">' + escapeHtml(p) + '</span>'; }).join('') + '</div>' +
         '<div class="task-hint">POINTSは4つのうち2つを選び、言い換えて使う。序論で意見と理由を予告 → First → Second → In conclusion の4段落。</div>' +
-        (entry.note ? '<div class="task-note">' + escapeHtml(entry.note) + '</div>' : '');
+        (entry.note ? '<div class="task-note">' + escapeHtml(entry.note) + '</div>' : '') +
+        '<div class="action-row" style="margin-top:10px;"><button type="button" class="action-btn subtle-btn" data-role="swap-topic">別のお題にする</button>' +
+        '<span class="action-hint">他の教材で同じお題を先にやってしまった時などに</span></div>';
     } else {
-      var summaryPrompt = '英検準1級ライティング対策として、本番形式の要約問題を1問出してください。約200語の英文（3段落構成：話題の導入→利点や賛成の動き→Howeverで転換して問題点や批判、の流れ）と、模範要約（60〜70語）を用意してください。';
+      var paragraphsHtml = String(entry.summaryText || '').split('\n\n').map(function (p) {
+        return '<p>' + escapeHtml(p) + '</p>';
+      }).join('');
       topHtml =
-        '<div class="task-hint" style="margin-top:0;">約200語の英文を60〜70語に要約する。本文の語句はそのまま写さず、必ず自分の言葉に言い換える。</div>' +
-        '<div class="prompt-box">' +
-          '<div class="prompt-text">' + escapeHtml(summaryPrompt) + '</div>' +
-          '<button class="copy-btn" type="button" data-copy="' + encodeURIComponent(summaryPrompt) + '">コピー</button>' +
-        '</div>' +
-        '<div class="task-hint">↑ まずこれをClaudeに貼って、今日の要約用の英文を出してもらう。</div>';
+        '<div class="task-hint" style="margin-top:0;">以下の英文（約200語）を読み、60〜70語の英語に要約する。本文の語句はそのまま写さず、必ず自分の言葉に言い換える。</div>' +
+        '<div class="summary-passage">' + paragraphsHtml + '</div>' +
+        '<div class="action-row" style="margin-top:10px;"><button type="button" class="action-btn subtle-btn" data-role="swap-summary">別の問題にする</button>' +
+        '<span class="action-hint">他の教材で同じ問題を先にやってしまった時などに</span></div>';
     }
 
     var scoreRowsHtml = CRITERIA.map(function (c) {
@@ -1153,6 +1238,14 @@
       copyText(buildGradingPrompt(kind, entry, body), copyBtn);
     });
 
+    var swapBtn = card.querySelector(isEssay ? '[data-role="swap-topic"]' : '[data-role="swap-summary"]');
+    if (swapBtn) {
+      swapBtn.addEventListener('click', function () {
+        swapAssign(entry.day, isEssay ? 'topicIdx' : 'summaryIdx', isEssay ? topics.length : summaries.length);
+        render();
+      });
+    }
+
     var totalEl = card.querySelector('.grade-total');
     function updateTotal() {
       var s = scoreSum(getDay(entry.day)[cfg.sf]);
@@ -1187,7 +1280,7 @@
   function buildDayText(entry) {
     var d = getDay(entry.day);
     var lines = [];
-    lines.push('英検準1級 ライティング記録 — Day ' + entry.day + '（' + fmtISO(entry.dateObj) + '）');
+    lines.push('英検準1級 ライティング記録 — Day ' + entry.day + ' / 20');
     lines.push('');
     if (entry.topic) {
       lines.push('■ 意見論述 TOPIC: ' + entry.topic.en);
@@ -1253,10 +1346,9 @@
     var stat = document.createElement('div');
     stat.className = 'done-stat';
     stat.id = 'doneStatLine';
-    var elapsed = Math.min(20, Math.max(0, Math.round((today - plan[0].dateObj) / 86400000) + 1));
     var doneCount = 0;
     for (var k in progress) { if (progress[k]) doneCount++; }
-    stat.innerHTML = 'これまで <b>' + doneCount + '</b> / ' + elapsed + ' 日 完了';
+    stat.innerHTML = 'これまで <b>' + doneCount + '</b> / 20 日 完了';
     row.appendChild(stat);
     return row;
   }
@@ -1264,10 +1356,9 @@
   function refreshDoneStat() {
     var stat = document.getElementById('doneStatLine');
     if (!stat) return;
-    var elapsed = Math.min(20, Math.max(0, Math.round((today - plan[0].dateObj) / 86400000) + 1));
     var doneCount = 0;
     for (var k in progress) { if (progress[k]) doneCount++; }
-    stat.innerHTML = 'これまで <b>' + doneCount + '</b> / ' + elapsed + ' 日 完了';
+    stat.innerHTML = 'これまで <b>' + doneCount + '</b> / 20 日 完了';
   }
 
   function renderHistory() {
@@ -1292,13 +1383,14 @@
     });
     items.forEach(function (it) {
       var planDay = plan[it.day - 1];
-      var topicEn = planDay && planDay.topic ? planDay.topic.en : (planDay && planDay.phase === 'review' ? '前日調整' : '—');
+      var fe = entryFor(it.day);
+      var topicEn = fe && fe.topic ? fe.topic.en : (planDay && planDay.phase === 'review' ? '前日調整' : '—');
       var es = scoreSum(it.d.essayScores), ss = scoreSum(it.d.summaryScores);
       var div = document.createElement('div');
       div.className = 'history-item';
       div.innerHTML =
         '<div class="history-main">' +
-          '<div class="history-day">Day ' + it.day + ' ・ ' + (planDay ? fmtShort(planDay.dateObj) : '') + '</div>' +
+          '<div class="history-day">Day ' + it.day + '</div>' +
           '<div class="history-topic">' + escapeHtml(topicEn) + '</div>' +
         '</div>' +
         '<div class="history-scores">' +
@@ -1319,14 +1411,14 @@
       { key: 'phase3', days: plan.slice(14, 19) },
       { key: 'review', days: plan.slice(19, 20) }
     ];
-    var todayStr = fmtISO(today);
+    var curDay = currentDayNum();
 
     groups.forEach(function (g) {
       var gDiv = document.createElement('div');
       gDiv.className = 'phase-group';
       var label = document.createElement('div');
       label.className = 'phase-group-label';
-      label.textContent = phaseInfo[g.key].label + '（' + fmtShort(g.days[0].dateObj) + '〜' + fmtShort(g.days[g.days.length - 1].dateObj) + '）';
+      label.textContent = phaseInfo[g.key].label;
       gDiv.appendChild(label);
 
       var row = document.createElement('div');
@@ -1334,7 +1426,7 @@
       g.days.forEach(function (d) {
         var btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'tick' + (d.phase === 'review' ? ' is-review' : '') + (d.dateStr === todayStr ? ' is-today' : '') + (progress[d.day] ? ' is-done' : '');
+        btn.className = 'tick' + (d.phase === 'review' ? ' is-review' : '') + (d.day === curDay ? ' is-today' : '') + (progress[d.day] ? ' is-done' : '');
         btn.textContent = d.day;
         var dd = data[d.day];
         if (dd) {
@@ -1346,30 +1438,24 @@
             btn.appendChild(badge);
           }
         }
-        var isPastOrToday = d.dateObj <= today;
-        if (!isPastOrToday) {
-          btn.disabled = true;
-        } else {
-          btn.addEventListener('click', function () {
-            progress[d.day] = !progress[d.day];
-            saveProgress(progress);
-            render();
-          });
-        }
-        btn.title = fmtJP(d.dateObj) + (d.topic ? ' / ' + d.topic.en : '');
+        btn.addEventListener('click', function () {
+          progress[d.day] = !progress[d.day];
+          saveProgress(progress);
+          render();
+        });
+        var fe = entryFor(d.day);
+        btn.title = 'DAY ' + d.day + (fe && fe.topic ? ' / ' + fe.topic.en : '');
         row.appendChild(btn);
       });
       gDiv.appendChild(row);
       container.appendChild(gDiv);
     });
 
-    var elapsed = Math.min(20, Math.max(0, Math.round((today - plan[0].dateObj) / 86400000) + 1));
     var doneCount = 0;
     for (var k in progress) { if (progress[k]) doneCount++; }
-    document.getElementById('progressStat').textContent = doneCount + ' / ' + elapsed + ' 日 完了';
+    document.getElementById('progressStat').textContent = doneCount + ' / 20 日 完了';
   }
 
-  function fmtShort(d) { return (d.getMonth() + 1) + '/' + d.getDate(); }
   function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -1394,8 +1480,10 @@
         if (!err && row && row.payload) {
           if (row.payload.progress) progress = row.payload.progress;
           if (row.payload.data) data = row.payload.data;
+          if (row.payload.assign) assign = row.payload.assign;
           try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch (e) {}
           try { localStorage.setItem(DATA_KEY, JSON.stringify(data)); } catch (e) {}
+          try { localStorage.setItem(ASSIGN_KEY, JSON.stringify(assign)); } catch (e) {}
         }
         lastSyncedAt = new Date();
         render();
