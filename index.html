@@ -1,3 +1,4 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>英検準1級 ライティング特訓 — 今日のタスク</title>
 <style>
@@ -496,6 +497,319 @@
     background: var(--surface-2); border-radius: 8px; padding: 6px 12px;
   }
   .sync-time { font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+  /* ========== ビュー切り替えタブ ========== */
+  .view-tabs {
+    display: flex; gap: 8px; margin: 22px 0 2px; flex-wrap: wrap;
+  }
+  .view-tab {
+    font-family: var(--font-body); font-size: 13.5px; font-weight: 600;
+    padding: 10px 16px; min-height: 42px; border-radius: 999px;
+    border: 1px solid var(--border-strong); background: var(--surface); color: var(--text-muted);
+    cursor: pointer; touch-action: manipulation; white-space: nowrap;
+  }
+  .view-tab:hover { background: var(--surface-2); }
+  .view-tab.is-active {
+    background: var(--accent); border-color: var(--accent); color: #fff;
+  }
+  .view-tab .tab-count {
+    font-family: var(--font-mono); font-size: 11.5px; margin-left: 7px;
+    opacity: 0.75; font-variant-numeric: tabular-nums;
+  }
+
+  /* ========== 添削レポート（全画面共通・統一デザイン） ========== */
+  .rv {
+    margin-top: 16px; border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--surface); box-shadow: var(--shadow); overflow: hidden;
+  }
+  .rv-head {
+    padding: 16px 18px 14px; background: var(--surface-2); border-bottom: 1px solid var(--border);
+  }
+  .rv-head-top {
+    display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  }
+  .rv-badge {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    background: var(--accent); color: #fff; border-radius: 6px; padding: 4px 9px;
+  }
+  .rv-badge.is-summary { background: var(--accent-soft); }
+  .rv-title { font-family: var(--font-display); font-size: 17px; font-weight: 600; color: var(--accent-strong); }
+  .rv-meta { font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+  .rv-topic { font-size: 13.5px; color: var(--text-muted); margin-top: 8px; line-height: 1.6; }
+  .rv-body { padding: 4px 18px 20px; }
+  .rv-sec { margin-top: 22px; }
+  .rv-sec-title {
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-muted); border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 12px;
+  }
+
+  /* スコアパネル */
+  .rv-scorewrap { display: flex; gap: 18px; flex-wrap: wrap; align-items: flex-start; margin-top: 16px; }
+  .rv-total {
+    flex-shrink: 0; text-align: center; background: var(--surface-2);
+    border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 18px; min-width: 108px;
+  }
+  .rv-total-num {
+    font-family: var(--font-display); font-size: 34px; font-weight: 700; line-height: 1;
+    color: var(--accent-strong); font-variant-numeric: tabular-nums;
+  }
+  .rv-total-num small { font-size: 15px; font-weight: 400; color: var(--text-muted); }
+  .rv-total-label {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-muted); margin-top: 6px;
+  }
+  .rv-scores { flex: 1 1 260px; display: grid; gap: 10px; }
+  .rv-score-row { display: grid; grid-template-columns: 42px 1fr 34px; gap: 10px; align-items: center; }
+  .rv-score-name { font-size: 13px; color: var(--text-muted); }
+  .rv-bar { height: 8px; border-radius: 999px; background: var(--border); overflow: hidden; }
+  .rv-bar span { display: block; height: 100%; border-radius: 999px; background: var(--accent); }
+  .rv-bar.lv0 span, .rv-bar.lv1 span { background: var(--today); }
+  .rv-bar.lv2 span { background: #B5732A; }
+  .rv-bar.lv4 span { background: var(--done); }
+  .rv-score-val { font-family: var(--font-mono); font-size: 13px; color: var(--text); text-align: right; font-variant-numeric: tabular-nums; }
+  .rv-reasons { display: grid; gap: 8px; margin-top: 14px; }
+  .rv-reason { font-size: 13px; line-height: 1.75; color: var(--text-muted); }
+  .rv-reason b { color: var(--text); font-weight: 600; }
+
+  /* 語数バッジ */
+  .rv-wc {
+    display: inline-flex; align-items: baseline; gap: 7px; margin-top: 14px;
+    font-family: var(--font-mono); font-size: 12.5px; font-variant-numeric: tabular-nums;
+    border-radius: 999px; padding: 6px 13px; border: 1px solid var(--border-strong);
+    background: var(--surface-2); color: var(--text-muted);
+  }
+  .rv-wc.is-ok { background: var(--done-bg); border-color: rgba(63,122,91,0.4); color: var(--done); }
+  .rv-wc.is-ng { background: var(--today-bg); border-color: rgba(178,58,46,0.4); color: var(--today); }
+  .rv-wc b { font-size: 15px; }
+
+  .rv-overall {
+    margin-top: 14px; font-size: 14px; line-height: 1.9;
+    background: var(--surface-2); border-radius: var(--radius-sm); padding: 14px 16px;
+    border-left: 3px solid var(--accent);
+  }
+
+  /* 一文ずつの精査 */
+  .rv-sent {
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 13px 15px; margin-bottom: 10px; background: var(--surface);
+  }
+  .rv-sent.is-error { border-left: 3px solid var(--today); }
+  .rv-sent.is-warn { border-left: 3px solid #B5732A; }
+  .rv-sent.is-ok { border-left: 3px solid var(--done); background: var(--surface-2); }
+  .rv-sent-no {
+    font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);
+    letter-spacing: 0.08em; margin-bottom: 6px;
+  }
+  .rv-orig {
+    font-family: var(--font-display); font-size: 15.5px; line-height: 1.95; color: var(--text);
+    word-break: break-word;
+  }
+  .rv-fix {
+    font-family: var(--font-display); font-size: 15.5px; line-height: 1.95;
+    margin-top: 9px; padding-top: 9px; border-top: 1px dashed var(--border);
+    color: var(--done); word-break: break-word;
+  }
+  .rv-fix::before {
+    content: '→'; font-family: var(--font-mono); margin-right: 8px; opacity: 0.7;
+  }
+  .rv-notes { display: grid; gap: 6px; margin-top: 10px; }
+  .rv-note {
+    font-size: 12.5px; line-height: 1.7; color: var(--text-muted);
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+  .rv-note-tag {
+    flex-shrink: 0; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em;
+    text-transform: uppercase; border-radius: 5px; padding: 2px 7px; margin-top: 2px;
+    border: 1px solid currentColor; opacity: 0.9;
+  }
+  .rv-comment {
+    font-size: 13px; line-height: 1.8; color: var(--text); margin-top: 10px;
+    background: var(--surface-2); border-radius: 8px; padding: 9px 12px;
+  }
+  .rv-sent.is-ok .rv-comment { background: var(--surface); }
+  .rv-better {
+    font-size: 13.5px; line-height: 1.85; margin-top: 9px; color: var(--accent);
+    font-family: var(--font-display);
+  }
+  .rv-better::before {
+    content: 'さらに上を狙うなら'; display: block; font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 3px;
+  }
+
+  /* 赤線マーク */
+  .rv-mark {
+    background: none; color: inherit; text-decoration: line-through;
+    text-decoration-color: var(--today); text-decoration-thickness: 2px;
+    border-bottom: 2px solid var(--today); padding-bottom: 1px;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .rv-mark.t-grammar  { text-decoration-color: #B23A2E; border-bottom-color: #B23A2E; background: rgba(178,58,46,0.10); }
+  .rv-mark.t-vocab    { text-decoration-color: #B5732A; border-bottom-color: #B5732A; background: rgba(181,115,42,0.12); }
+  .rv-mark.t-spelling { text-decoration-color: #7A4B9E; border-bottom-color: #7A4B9E; background: rgba(122,75,158,0.12); }
+  .rv-mark.t-structure{ text-decoration-color: #2C5B8F; border-bottom-color: #2C5B8F; background: rgba(44,91,143,0.12); }
+  .rv-mark.t-logic    { text-decoration-color: #3F7A5B; border-bottom-color: #3F7A5B; background: rgba(63,122,91,0.14); }
+  .rv-mark.t-wordy    { text-decoration-color: #6B77A0; border-bottom-color: #6B77A0; background: rgba(107,119,160,0.14); }
+  .rv-mark.t-style    { text-decoration-color: #8A6D3B; border-bottom-color: #8A6D3B; background: rgba(138,109,59,0.12); }
+  .rv-note.t-grammar  { color: #B23A2E; }
+  .rv-note.t-vocab    { color: #B5732A; }
+  .rv-note.t-spelling { color: #7A4B9E; }
+  .rv-note.t-structure{ color: #2C5B8F; }
+  .rv-note.t-logic    { color: #3F7A5B; }
+  .rv-note.t-wordy    { color: #6B77A0; }
+  .rv-note.t-style    { color: #8A6D3B; }
+  .rv-note-body { color: var(--text-muted); }
+  @media (prefers-color-scheme: dark) {
+    .rv-mark.t-grammar  { color: #FF9E92; }
+    .rv-mark.t-vocab    { color: #F0BE7C; }
+    .rv-mark.t-spelling { color: #D3AEF0; }
+    .rv-mark.t-structure{ color: #9DC2EE; }
+    .rv-mark.t-logic    { color: #96D6B3; }
+    .rv-note.t-grammar  { color: #FF9E92; }
+    .rv-note.t-vocab    { color: #F0BE7C; }
+    .rv-note.t-spelling { color: #D3AEF0; }
+    .rv-note.t-structure{ color: #9DC2EE; }
+    .rv-note.t-logic    { color: #96D6B3; }
+    .rv-note.t-style    { color: #D9BE8A; }
+  }
+
+  .rv-sent-toggle {
+    font-family: var(--font-body); font-size: 12.5px; color: var(--text-muted);
+    background: none; border: 1px dashed var(--border-strong); border-radius: 8px;
+    padding: 9px 14px; width: 100%; cursor: pointer; margin-bottom: 10px; touch-action: manipulation;
+  }
+  .rv-sent-toggle:hover { background: var(--surface-2); }
+  .rv-sents.hide-ok .rv-sent.is-ok { display: none; }
+
+  /* リスト系 */
+  .rv-list { display: grid; gap: 9px; }
+  .rv-li {
+    font-size: 13.5px; line-height: 1.85; padding-left: 20px; position: relative; color: var(--text);
+  }
+  .rv-li::before {
+    content: ''; position: absolute; left: 4px; top: 9px;
+    width: 6px; height: 6px; border-radius: 50%; background: var(--accent-soft);
+  }
+  .rv-imp {
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 12px 15px; margin-bottom: 9px; background: var(--surface-2);
+  }
+  .rv-imp-title { font-size: 14px; font-weight: 700; color: var(--accent-strong); }
+  .rv-imp-detail { font-size: 13px; line-height: 1.8; color: var(--text-muted); margin-top: 5px; }
+  .rv-imp-ex {
+    font-family: var(--font-display); font-size: 13.5px; line-height: 1.8;
+    margin-top: 7px; padding: 7px 11px; background: var(--surface);
+    border-radius: 7px; border-left: 2px solid var(--accent-soft); color: var(--text);
+  }
+  .rv-model {
+    font-family: var(--font-display); font-size: 15.5px; line-height: 2.05;
+    background: var(--surface-2); border-radius: var(--radius-sm); padding: 15px 17px;
+    white-space: pre-wrap; word-break: break-word;
+  }
+  .rv-model-note { font-size: 13px; line-height: 1.85; color: var(--text-muted); margin-top: 10px; }
+  .rv-phrases { display: grid; gap: 8px; }
+  .rv-phrase {
+    display: grid; grid-template-columns: minmax(140px, 0.9fr) 1fr; gap: 4px 14px;
+    border-bottom: 1px dotted var(--border); padding-bottom: 8px;
+  }
+  .rv-phrase-en { font-family: var(--font-display); font-size: 14.5px; color: var(--accent-strong); }
+  .rv-phrase-ja { font-size: 13px; color: var(--text); }
+  .rv-phrase-use { font-size: 12px; color: var(--text-muted); grid-column: 1 / -1; }
+  @media (max-width: 560px) {
+    .rv-phrase { grid-template-columns: 1fr; }
+    .rv-score-row { grid-template-columns: 40px 1fr 30px; }
+    .rv-body { padding: 4px 14px 18px; }
+    .rv-head { padding: 14px 14px 12px; }
+  }
+
+  .rv-foot {
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--border);
+  }
+
+  /* 貼り付け欄まわり */
+  .paste-status { font-size: 12.5px; margin-top: 8px; line-height: 1.7; }
+  .paste-status.ok { color: var(--done); }
+  .paste-status.ng { color: var(--today); }
+  .paste-status.plain { color: var(--text-muted); }
+
+  /* アーカイブ */
+  .rv-toolbar {
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 4px;
+  }
+  .rv-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .rv-chip {
+    font-family: var(--font-body); font-size: 12.5px; padding: 8px 13px; min-height: 38px;
+    border-radius: 999px; border: 1px solid var(--border-strong);
+    background: var(--surface); color: var(--text-muted); cursor: pointer; touch-action: manipulation;
+  }
+  .rv-chip.is-active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .arc-item {
+    border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface);
+    margin-top: 12px; overflow: hidden; box-shadow: var(--shadow);
+  }
+  .arc-head {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    padding: 14px 16px; cursor: pointer; background: var(--surface); width: 100%;
+    border: 0; text-align: left; font-family: var(--font-body); color: var(--text);
+    touch-action: manipulation;
+  }
+  .arc-head:hover { background: var(--surface-2); }
+  .arc-day {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em;
+    background: var(--surface-2); border-radius: 6px; padding: 5px 9px; color: var(--accent-strong);
+  }
+  .arc-kind {
+    font-size: 12px; border-radius: 999px; padding: 4px 10px;
+    border: 1px solid var(--border-strong); color: var(--text-muted);
+  }
+  .arc-topic {
+    flex: 1 1 200px; font-size: 13.5px; color: var(--text); line-height: 1.6;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .arc-score {
+    font-family: var(--font-mono); font-size: 13px; color: var(--text-muted);
+    font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .arc-score b { font-size: 16px; color: var(--accent-strong); }
+  .arc-errs {
+    font-family: var(--font-mono); font-size: 11.5px; color: var(--today);
+    background: var(--today-bg); border-radius: 6px; padding: 4px 8px; white-space: nowrap;
+  }
+  .arc-chev { color: var(--text-muted); font-size: 18px; transition: transform 0.15s ease; }
+  .arc-item.is-open .arc-chev { transform: rotate(90deg); }
+  .arc-panel { padding: 0 16px 16px; border-top: 1px solid var(--border); }
+  .arc-panel .rv { margin-top: 14px; box-shadow: none; }
+  .arc-empty {
+    border: 1px dashed var(--border-strong); border-radius: var(--radius);
+    padding: 28px 20px; text-align: center; color: var(--text-muted);
+    font-size: 13.5px; line-height: 1.9; margin-top: 14px;
+  }
+
+  /* ========== 印刷 / PDF ========== */
+  @media print {
+    :root { --bg: #fff; --surface: #fff; --surface-2: #F6F6F0; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    @page { size: A4; margin: 14mm 12mm; }
+    body { background: #fff; }
+    .wrap { max-width: none; padding: 0; }
+    .ticket, .sync-card, .view-tabs, .rv-toolbar, footer,
+    .editor-block, .action-row, .grade-block, .done-row, .acc,
+    #timeline, .task-strip, .rv-foot, .arc-chev { display: none !important; }
+    .task-card, .arc-item, .rv, .section { box-shadow: none !important; border-color: #ccc !important; }
+    .rv, .arc-item { break-inside: auto; page-break-inside: auto; }
+    .rv-sent, .rv-imp, .rv-model { break-inside: avoid; page-break-inside: avoid; }
+    .rv-sec { break-inside: auto; }
+    .arc-panel { display: block !important; }
+    body.printing-one .wrap { display: none !important; }
+    body.printing-one #printHost { display: block !important; }
+    #printHost .rv { margin: 0 0 16px; border: 0; }
+    #printHost .rv + .rv { break-before: page; page-break-before: always; }
+    #printHost .print-title {
+      font-family: var(--font-display); font-size: 15px; color: #000;
+      border-bottom: 1px solid #999; padding-bottom: 6px; margin-bottom: 12px;
+    }
+  }
+  #printHost { display: none; }
 </style>
 
 <div class="wrap">
@@ -536,6 +850,12 @@
     </div>
   </div>
 
+  <div class="view-tabs" id="viewTabs">
+    <button type="button" class="view-tab is-active" data-view="today">今日のタスク</button>
+    <button type="button" class="view-tab" data-view="archive">添削アーカイブ<span class="tab-count" id="tabArchiveCount"></span></button>
+  </div>
+
+  <div id="viewToday">
   <div id="mainArea"></div>
 
   <div class="section">
@@ -596,12 +916,38 @@
     </div>
     <div class="history-list" id="historyList"></div>
   </div>
+  </div>
+
+  <div id="viewArchive" style="display:none;">
+    <div class="section">
+      <div class="section-head">
+        <h2>添削アーカイブ</h2>
+        <div class="section-sub" id="archiveCount">—</div>
+      </div>
+      <div class="rv-toolbar">
+        <div class="rv-filters" id="archiveFilters">
+          <button type="button" class="rv-chip is-active" data-filter="all">すべて</button>
+          <button type="button" class="rv-chip" data-filter="essay">意見論述</button>
+          <button type="button" class="rv-chip" data-filter="summary">英文要約</button>
+        </div>
+        <div class="rv-filters" id="archiveSorts">
+          <button type="button" class="rv-chip is-active" data-sort="new">新しい順</button>
+          <button type="button" class="rv-chip" data-sort="low">点数が低い順</button>
+        </div>
+        <button type="button" class="rv-chip" id="archivePrintAll">まとめて印刷・PDF</button>
+      </div>
+      <div id="archiveList"></div>
+    </div>
+  </div>
 
   <footer>
     進捗（完了マーク）はこの端末のブラウザだけに保存されます。PCとスマホでは別々にカウントされます。<br>
-    毎日「今日のタスク」を1本書いて、Claudeに貼って添削してもらうところまでが1セット。
+    毎日「今日のタスク」を1本書いて、添削依頼をコピー → Claudeに貼る → 返ってきたJSONを貼り戻す、
+    ここまでが1セット。添削結果は「添削アーカイブ」にたまっていきます。
   </footer>
 </div>
+
+<div id="printHost"></div>
 
 <script>
 (function () {
@@ -784,7 +1130,8 @@
       data[day] = {
         essayText: '', summaryText: '',
         essayScores: emptyScores(), summaryScores: emptyScores(),
-        essayNotes: '', summaryNotes: '', updatedAt: null
+        essayNotes: '', summaryNotes: '', updatedAt: null,
+        essayReview: null, summaryReview: null, essayReviewAt: null, summaryReviewAt: null
       };
     }
     var d = data[day];
@@ -794,6 +1141,8 @@
     if (typeof d.summaryText !== 'string') d.summaryText = '';
     if (typeof d.essayNotes !== 'string') d.essayNotes = '';
     if (typeof d.summaryNotes !== 'string') d.summaryNotes = '';
+    if (typeof d.essayReview !== 'object') d.essayReview = null;
+    if (typeof d.summaryReview !== 'object') d.summaryReview = null;
     return d;
   }
   function scoreSum(scores) {
@@ -1009,6 +1358,7 @@
 
     renderTimeline();
     renderHistory();
+    renderArchive();
   }
 
   function bigMessage(title, sub) {
@@ -1068,16 +1418,406 @@
     return (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
   }
 
+  var REVIEW_SCHEMA = [
+    '{',
+    '  "kind": "essay または summary",',
+    '  "topic": "課題のTOPIC（要約の場合は原文の主題を英語1文で）",',
+    '  "wordCount": { "actual": 実際に数えた語数, "min": 下限, "max": 上限, "verdict": "ok / under / over のいずれか" },',
+    '  "scores": { "content": 0〜4, "structure": 0〜4, "vocab": 0〜4, "grammar": 0〜4 },',
+    '  "scoreReasons": { "content": "日本語で2〜3文", "structure": "日本語で2〜3文", "vocab": "日本語で2〜3文", "grammar": "日本語で2〜3文" },',
+    '  "overall": "全体講評。日本語で4〜6文。いま何点相当で、どこを直せば何点上がるのかを具体的に書く",',
+    '  "sentences": [',
+    '    {',
+    '      "original": "答案の1文をそのまま（改変・整形しない）",',
+    '      "corrected": "その文の修正版。誤りがなければ original と同じでよい",',
+    '      "status": "error / warn / ok のいずれか",',
+    '      "spans": [',
+    '        { "text": "original の中に一字一句そのまま現れる、誤り箇所の語句", "type": "grammar", "note": "何がどう誤りなのかを日本語で1〜2文" }',
+    '      ],',
+    '      "comment": "この文全体についての日本語コメント（誤りがなければ良い点を書く）",',
+    '      "better": "さらに上を狙うための書き換え案。不要なら空文字 \\"\\""',
+    '    }',
+    '  ],',
+    '  "goodPoints": ["良かった点を日本語で2〜4個"],',
+    '  "improvements": [',
+    '    { "title": "次回への改善アクションの見出し（日本語）", "detail": "なぜ必要かの説明（日本語）", "example": "実際に使える英語の具体例" }',
+    '  ],',
+    '  "modelAnswer": "この課題の模範解答（英語・語数規定内・段落は改行で区切る）",',
+    '  "modelAnswerNote": "この模範解答のどこが高得点なのかの解説（日本語）",',
+    '  "phrases": [ { "en": "使える表現", "ja": "意味", "use": "どんな場面で使うか" } ]',
+    '}'
+  ].join('\n');
+
+  var PROMPT_COMMON = [
+    'あなたは英検準1級ライティングの採点官であり、受験生を合格させる指導者でもあります。',
+    '以下の答案を、実際の英検準1級の採点基準に沿って一文ずつ精査し、最後に指定のJSON形式で返してください。',
+    '',
+    '■ 英検準1級ライティングの前提（2024年度リニューアル後）',
+    '・ライティングは2題構成。大問1「英文要約」（200語程度の英文を60〜70語に要約／目安20分）と、',
+    '　大問2「意見論述」（TOPICとPOINTS4つが与えられ、120〜150語／目安25分）。',
+    '・各題は「内容・構成・語彙・文法」の4観点で0〜4点の5段階評価。1題16点満点、ライティング全体で32点満点。',
+    '・設問数が少ないぶん1問あたりの重みがリーディングより大きく、CSEスコアと一次試験の合否に直結する。',
+    '',
+    '■ 4観点の評価軸（この定義に厳密に沿って採点すること）',
+    '【内容】課題が求める内容が過不足なく含まれているか。意見論述なら立場の明示と、それを支える理由・説明・',
+    '　具体例の説得力。要約なら原文の各段落の要点を過不足なく拾えているか（重要度の低い数字・固有名詞・',
+    '　個別の具体例は削れているか）。',
+    '【構成】論理展開の分かりやすさ。First / In addition / However / As a result / In conclusion などの',
+    '　つなぎ表現で、文と文・段落と段落の関係が明示されているか。意見論述は「序論（意見表明）→本論（理由1・',
+    '　理由2）→結論」の型に沿っているか。要約は原文の論理構造（導入→展開→転換）を反映した順序か。',
+    '【語彙】トピックにふさわしい語彙を正確に使えているか。同じ語の繰り返しを避け、適切な同義語・言い換えが',
+    '　できているか。準1級レベルの、基本語より一段上の語彙を自然に使えているか。',
+    '【文法】文構造の正確さとバリエーション。単純な文の羅列ではなく、関係詞・分詞構文・仮定法などを含む',
+    '　多様な構造を誤りなく使えているか。主語と動詞の一致、時制の統一、スペルミスは確実な減点対象。',
+    '',
+    '■ 合格答案と不合格答案を分ける典型的な差（採点時の着眼点）',
+    '・語数を守れているか。範囲外は内容観点で減点されうるので、必ず数えて判定する。',
+    '・good / bad / a lot of / very / I think / people think のような中学英語レベルの語で押し切っていないか。',
+    '・同じ語・同じ構文の繰り返しに終始していないか。',
+    '・各文の役割（主張／理由／説明／具体例／結論）がはっきりしているか。',
+    '・冠詞、単数複数、前置詞、時制など、日本人受験者が落としやすい基本項目でミスしていないか。'
+  ].join('\n');
+
+  var PROMPT_STEPS = [
+    '',
+    '■ 添削の手順（必ずこの順番で行うこと）',
+    '1. 答案の語数を数え、規定の範囲内かどうかを判定する。',
+    '2. 答案をピリオドごとに一文ずつ取り出し、最初の文から最後の文まで、1文も飛ばさずに精査する。',
+    '3. 各文について、誤り・不自然な箇所を「文中の該当語句」単位で特定する。種類は',
+    '   grammar（文法）／ vocab（語彙選択）／ spelling（スペル）／ structure（文の構造・語順）／',
+    '   logic（論理のつながり）／ wordy（冗長）／ style（硬さ・体裁）から選ぶ。',
+    '4. 各文の修正版を示し、なぜ元の書き方ではダメなのかを日本語で説明する。',
+    '5. 4観点それぞれに0〜4点をつけ、その点数になった理由を日本語で書く。',
+    '6. 良かった点、次回に効く改善アクション3つ、模範解答とその解説、今後使える表現を挙げる。',
+    '',
+    '■ 出力形式（厳守。ここを外すと自動で読み込めません）',
+    '・前置き・あとがき・説明文は一切書かず、```json のコードブロックを1つだけ出力すること。',
+    '・下のスキーマのキー名は変えない。「日本語で」と指定した項目は必ず日本語で書く。',
+    '・sentences には答案の全文を、書かれた順に1文ずつ漏れなく入れる（誤りのない文も status を "ok" にして必ず含める）。',
+    '・spans[].text は original の中に一字一句そのまま現れる部分文字列にすること。',
+    '　前後の空白・大文字小文字・句読点まで一致させる（一致しないと該当箇所に赤線を引けません）。',
+    '・1つの文に複数の誤りがあれば spans を複数入れる。誤りのない文の spans は空配列にする。',
+    '',
+    '--- JSONスキーマ ---',
+    REVIEW_SCHEMA
+  ].join('\n');
+
   function buildGradingPrompt(kind, entry, body) {
+    var parts = [PROMPT_COMMON];
     if (kind === 'essay') {
-      return '以下は英検準1級ライティング「意見論述」の解答です。\n' +
-        'TOPIC: ' + entry.topic.en + '\n' +
-        'この英作文を英検準1級の採点基準（内容・構成・語彙・文法の4観点、各4点＝16点満点）で採点してください。' +
-        '各観点の点数、具体的な改善点トップ3、そして自然な修正例も教えてください。\n\n--- 解答 ---\n' + body;
+      parts.push([
+        '',
+        '■ 今回の課題（大問2・意見論述／120〜150語／目安25分）',
+        'TOPIC: ' + entry.topic.en,
+        'POINTS: ' + entry.topic.points.join(' / '),
+        '・TOPIC文をそのまま書き写さず、意見表明の一文は必ず言い換えているかを見る。',
+        '・POINTS4つのうち2つを選び、単なる列挙ではなく「理由→説明／具体例→結果」の展開になっているか。',
+        '・序論（意見表明＋理由の予告）→ First → Second → In conclusion の4段落構成か。',
+        '・語数の規定は120〜150語。'
+      ].join('\n'));
+    } else {
+      parts.push([
+        '',
+        '■ 今回の課題（大問1・英文要約／60〜70語／目安20分）',
+        '--- 要約対象の原文（約200語） ---',
+        entry.summaryText,
+        '--- 原文ここまで ---',
+        '・原文の語句をそのままコピーしていないかを最優先で見る。パラフレーズができていない箇所は',
+        '　語彙観点で厳しく減点し、spans の type を vocab にして「どう言い換えるべきか」を必ず示す。',
+        '・固有名詞・数字・個別の具体例を削り、抽象化してまとめられているか。',
+        '・原文の論理構造（導入→展開→However などの転換）を保ったまま圧縮できているか。',
+        '・語数の規定は60〜70語。'
+      ].join('\n'));
     }
-    return '以下は英検準1級ライティング「英文要約」の解答です。\n\n--- 元の英文 ---\n' + entry.summaryText + '\n\n' +
-      'この要約を英検準1級の採点基準（内容・構成・語彙・文法の4観点、各4点＝16点満点）で採点してください。' +
-      '各観点の点数、具体的な改善点トップ3、そして60〜70語の模範要約も教えてください。\n\n--- 解答 ---\n' + body;
+    parts.push(PROMPT_STEPS);
+    parts.push([
+      '',
+      '--- 採点・添削する答案（ここから） ---',
+      body,
+      '--- 答案ここまで ---'
+    ].join('\n'));
+    return parts.join('\n');
+  }
+
+  /* ===== 添削レポート：取り込みと描画 ===== */
+
+  var TYPE_LABELS = {
+    grammar: '文法', vocab: '語彙', spelling: 'スペル', structure: '構造',
+    logic: '論理', wordy: '冗長', style: '体裁'
+  };
+  function typeClass(t) {
+    var k = String(t || '').toLowerCase();
+    return TYPE_LABELS[k] ? 't-' + k : '';
+  }
+  function typeLabel(t) {
+    var k = String(t || '').toLowerCase();
+    return TYPE_LABELS[k] || (k || '指摘');
+  }
+
+  // 貼り付けテキストから添削JSONを取り出す。読めなければ null（＝従来どおりメモ扱い）
+  function parseReviewJson(text) {
+    var s = String(text || '').trim();
+    if (!s) return null;
+    var fence = s.match(/```(?:json)?\s*([\s\S]*?)```/i);
+    if (fence) s = fence[1].trim();
+    if (s.charAt(0) !== '{') {
+      var i = s.indexOf('{'), j = s.lastIndexOf('}');
+      if (i === -1 || j === -1 || j <= i) return null;
+      s = s.slice(i, j + 1);
+    }
+    var obj = null;
+    try { obj = JSON.parse(s); } catch (e) { return null; }
+    if (!obj || typeof obj !== 'object' || obj.constructor === Array) return null;
+    if (!obj.scores && !obj.sentences && !obj.overall) return null;
+    return obj;
+  }
+
+  function clampScore(v) {
+    var n = parseInt(v, 10);
+    if (isNaN(n)) return null;
+    return Math.max(0, Math.min(4, n));
+  }
+  function normScores(scores) {
+    var out = emptyScores();
+    if (!scores) return out;
+    for (var i = 0; i < CRITERIA.length; i++) {
+      out[CRITERIA[i].key] = clampScore(scores[CRITERIA[i].key]);
+    }
+    return out;
+  }
+  function reviewErrorCount(review) {
+    var n = 0;
+    if (!review || !review.sentences || !review.sentences.length) return 0;
+    review.sentences.forEach(function (s) {
+      if (s && s.spans && s.spans.length) n += s.spans.length;
+    });
+    return n;
+  }
+  function sentStatus(s) {
+    var st = String(s && s.status || '').toLowerCase();
+    if (st === 'ok' || st === 'warn' || st === 'error') return st;
+    return (s && s.spans && s.spans.length) ? 'error' : 'ok';
+  }
+
+  // 原文の中の該当語句だけを赤線で囲む。見つからない span は素通し（描画は落とさない）
+  function buildMarkedHtml(original, spans) {
+    var text = String(original || '');
+    if (!text) return '';
+    var ranges = [];
+    (spans || []).forEach(function (sp) {
+      var needle = (sp && typeof sp.text === 'string') ? sp.text : '';
+      if (!needle) return;
+      var from = 0, idx;
+      while ((idx = text.indexOf(needle, from)) !== -1) {
+        var end = idx + needle.length;
+        var hit = false;
+        for (var k = 0; k < ranges.length; k++) {
+          if (idx < ranges[k].end && end > ranges[k].start) { hit = true; break; }
+        }
+        if (!hit) { ranges.push({ start: idx, end: end, type: sp.type }); return; }
+        from = idx + 1;
+      }
+    });
+    ranges.sort(function (a, b) { return a.start - b.start; });
+    var out = '', pos = 0;
+    ranges.forEach(function (r) {
+      out += escapeHtml(text.slice(pos, r.start));
+      var cls = typeClass(r.type);
+      out += '<mark class="rv-mark' + (cls ? ' ' + cls : '') + '">' + escapeHtml(text.slice(r.start, r.end)) + '</mark>';
+      pos = r.end;
+    });
+    out += escapeHtml(text.slice(pos));
+    return out;
+  }
+
+  function fmtStamp(ms) {
+    if (!ms) return '';
+    var d = new Date(ms);
+    return d.getFullYear() + '/' + pad2(d.getMonth() + 1) + '/' + pad2(d.getDate()) + ' ' + fmtTimeShort(d);
+  }
+
+  // 添削レポート本体。今日のタスク側でもアーカイブ側でも同じこの関数で描くので見た目は常に一致する
+  function renderReview(review, meta) {
+    meta = meta || {};
+    var kind = (meta.kind === 'summary' || (!meta.kind && review.kind === 'summary')) ? 'summary' : 'essay';
+    var kindLabel = kind === 'summary' ? '英文要約' : '意見論述';
+    var sc = normScores(review.scores);
+    var total = scoreSum(sc);
+
+    function sec(title, inner) {
+      if (!inner) return '';
+      return '<div class="rv-sec"><div class="rv-sec-title">' + title + '</div>' + inner + '</div>';
+    }
+
+    var scoreRows = CRITERIA.map(function (c) {
+      var v = sc[c.key];
+      var pct = (v === null ? 0 : (v / 4) * 100);
+      return '<div class="rv-score-row">' +
+        '<span class="rv-score-name">' + c.label + '</span>' +
+        '<span class="rv-bar lv' + (v === null ? 0 : v) + '"><span style="width:' + pct + '%;"></span></span>' +
+        '<span class="rv-score-val">' + (v === null ? '—' : v) + '</span>' +
+      '</div>';
+    }).join('');
+
+    var reasons = CRITERIA.map(function (c) {
+      var r = review.scoreReasons && review.scoreReasons[c.key];
+      if (!r) return '';
+      return '<div class="rv-reason"><b>' + c.label + '</b>　' + escapeHtml(r) + '</div>';
+    }).join('');
+
+    var wcHtml = '';
+    var wc = review.wordCount;
+    if (wc && (wc.actual || wc.actual === 0)) {
+      var verdict = String(wc.verdict || '').toLowerCase();
+      var wcCls = verdict === 'ok' ? 'is-ok' : (verdict === 'under' || verdict === 'over' ? 'is-ng' : '');
+      var tail = '';
+      if (wc.min && wc.max) tail += ' ／ 規定 ' + wc.min + '〜' + wc.max + '語';
+      if (verdict === 'under') tail += '　語数不足';
+      else if (verdict === 'over') tail += '　語数超過';
+      else if (verdict === 'ok') tail += '　規定内';
+      wcHtml = '<div class="rv-wc ' + wcCls + '"><b>' + escapeHtml(String(wc.actual)) + '</b> 語' + escapeHtml(tail) + '</div>';
+    }
+
+    var sents = (review.sentences && review.sentences.length) ? review.sentences : [];
+    var okCount = 0;
+    var sentHtml = sents.map(function (s, i) {
+      var st = sentStatus(s);
+      if (st === 'ok') okCount++;
+      var marked = buildMarkedHtml(s.original, s.spans);
+      var fixed = (s.corrected && String(s.corrected).trim() && String(s.corrected).trim() !== String(s.original || '').trim())
+        ? '<div class="rv-fix">' + escapeHtml(s.corrected) + '</div>' : '';
+      var notes = (s.spans || []).map(function (sp) {
+        if (!sp || !sp.note) return '';
+        return '<div class="rv-note ' + typeClass(sp.type) + '">' +
+          '<span class="rv-note-tag">' + escapeHtml(typeLabel(sp.type)) + '</span>' +
+          '<span class="rv-note-body">' + (sp.text ? '<b>' + escapeHtml(sp.text) + '</b>　' : '') + escapeHtml(sp.note) + '</span>' +
+        '</div>';
+      }).join('');
+      return '<div class="rv-sent is-' + st + '">' +
+        '<div class="rv-sent-no">' + pad2(i + 1) + (st === 'ok' ? '　OK' : (st === 'warn' ? '　要改善' : '　要修正')) + '</div>' +
+        '<div class="rv-orig">' + marked + '</div>' +
+        fixed +
+        (notes ? '<div class="rv-notes">' + notes + '</div>' : '') +
+        (s.comment ? '<div class="rv-comment">' + escapeHtml(s.comment) + '</div>' : '') +
+        (s.better ? '<div class="rv-better">' + escapeHtml(s.better) + '</div>' : '') +
+      '</div>';
+    }).join('');
+    var sentBlock = '';
+    if (sentHtml) {
+      sentBlock =
+        (okCount ? '<button type="button" class="rv-sent-toggle" data-role="toggle-ok">誤りのなかった ' + okCount + ' 文を隠す</button>' : '') +
+        '<div class="rv-sents">' + sentHtml + '</div>';
+    }
+
+    var goodHtml = (review.goodPoints && review.goodPoints.length)
+      ? '<div class="rv-list">' + review.goodPoints.map(function (g) {
+          return '<div class="rv-li">' + escapeHtml(g) + '</div>';
+        }).join('') + '</div>' : '';
+
+    var impHtml = (review.improvements && review.improvements.length)
+      ? review.improvements.map(function (im) {
+          if (!im) return '';
+          return '<div class="rv-imp">' +
+            '<div class="rv-imp-title">' + escapeHtml(im.title || '') + '</div>' +
+            (im.detail ? '<div class="rv-imp-detail">' + escapeHtml(im.detail) + '</div>' : '') +
+            (im.example ? '<div class="rv-imp-ex">' + escapeHtml(im.example) + '</div>' : '') +
+          '</div>';
+        }).join('') : '';
+
+    var modelHtml = review.modelAnswer
+      ? '<div class="rv-model">' + escapeHtml(review.modelAnswer) + '</div>' +
+        (review.modelAnswerNote ? '<div class="rv-model-note">' + escapeHtml(review.modelAnswerNote) + '</div>' : '')
+      : '';
+
+    var phraseHtml = (review.phrases && review.phrases.length)
+      ? '<div class="rv-phrases">' + review.phrases.map(function (p) {
+          if (!p) return '';
+          return '<div class="rv-phrase">' +
+            '<span class="rv-phrase-en">' + escapeHtml(p.en || '') + '</span>' +
+            '<span class="rv-phrase-ja">' + escapeHtml(p.ja || '') + '</span>' +
+            (p.use ? '<span class="rv-phrase-use">' + escapeHtml(p.use) + '</span>' : '') +
+          '</div>';
+        }).join('') + '</div>' : '';
+
+    var topicLine = review.topic ? '<div class="rv-topic">' + escapeHtml(review.topic) + '</div>' : '';
+    var stamp = fmtStamp(meta.at);
+
+    var el = document.createElement('div');
+    el.className = 'rv';
+    el.innerHTML =
+      '<div class="rv-head">' +
+        '<div class="rv-head-top">' +
+          '<span class="rv-badge' + (kind === 'summary' ? ' is-summary' : '') + '">' + (meta.day ? 'DAY ' + meta.day + ' · ' : '') + kindLabel + '</span>' +
+          '<span class="rv-title">添削レポート</span>' +
+          (stamp ? '<span class="rv-meta">' + stamp + ' 取り込み</span>' : '') +
+        '</div>' +
+        topicLine +
+      '</div>' +
+      '<div class="rv-body">' +
+        '<div class="rv-scorewrap">' +
+          '<div class="rv-total"><div class="rv-total-num">' + (total === null ? '—' : total) + '<small> / 16</small></div>' +
+          '<div class="rv-total-label">' + kindLabel + '</div></div>' +
+          '<div class="rv-scores">' + scoreRows + '</div>' +
+        '</div>' +
+        (reasons ? '<div class="rv-reasons">' + reasons + '</div>' : '') +
+        wcHtml +
+        (review.overall ? '<div class="rv-overall">' + escapeHtml(review.overall) + '</div>' : '') +
+        sec('一文ずつの精査', sentBlock) +
+        sec('良かった点', goodHtml) +
+        sec('次にやること', impHtml) +
+        sec('模範解答', modelHtml) +
+        sec('使える表現', phraseHtml) +
+        '<div class="rv-foot">' +
+          '<button type="button" class="rv-chip" data-role="print-review">このレポートを印刷・PDFで保存</button>' +
+        '</div>' +
+      '</div>';
+
+    var toggle = el.querySelector('[data-role="toggle-ok"]');
+    if (toggle) {
+      toggle.addEventListener('click', function () {
+        var box = el.querySelector('.rv-sents');
+        var hidden = box.classList.toggle('hide-ok');
+        toggle.textContent = hidden ? ('誤りのなかった ' + okCount + ' 文を表示する') : ('誤りのなかった ' + okCount + ' 文を隠す');
+      });
+    }
+    var printBtn = el.querySelector('[data-role="print-review"]');
+    if (printBtn) {
+      printBtn.addEventListener('click', function () {
+        printNodes([el], '英検準1級 ライティング添削レポート' + (meta.day ? '　DAY ' + meta.day : '') + '　' + kindLabel);
+      });
+    }
+    return el;
+  }
+
+  // 印刷は本体DOMを触らず、複製を印刷用ホストに置いて刷る
+  function printNodes(nodes, title) {
+    var host = document.getElementById('printHost');
+    if (!host) { window.print(); return; }
+    host.innerHTML = '';
+    if (title) {
+      var t = document.createElement('div');
+      t.className = 'print-title';
+      t.textContent = title;
+      host.appendChild(t);
+    }
+    nodes.forEach(function (n) {
+      var c = n.cloneNode(true);
+      var box = c.querySelector('.rv-sents');
+      if (box) box.classList.remove('hide-ok');
+      host.appendChild(c);
+    });
+    document.body.classList.add('printing-one');
+    var cleaned = false;
+    var cleanup = function () {
+      if (cleaned) return;
+      cleaned = true;
+      document.body.classList.remove('printing-one');
+      host.innerHTML = '';
+      window.removeEventListener('afterprint', cleanup);
+    };
+    window.addEventListener('afterprint', cleanup);
+    window.print();
+    setTimeout(cleanup, 2000);
   }
 
   function setupTimer(card, totalSec) {
@@ -1125,8 +1865,8 @@
     var t = entry.topic;
     var d = getDay(entry.day);
     var cfg = isEssay
-      ? { name: '意見論述', stats: '目安 25分 ／ 120〜150語', sec: 1500, min: 120, max: 150, tf: 'essayText', sf: 'essayScores', nf: 'essayNotes', editorLabel: 'あなたの英作文', copyLabel: '作文＋添削依頼をコピー' }
-      : { name: '英文要約', stats: '目安 20分 ／ 60〜70語', sec: 1200, min: 60, max: 70, tf: 'summaryText', sf: 'summaryScores', nf: 'summaryNotes', editorLabel: 'あなたの要約', copyLabel: '要約＋添削依頼をコピー' };
+      ? { name: '意見論述', stats: '目安 25分 ／ 120〜150語', sec: 1500, min: 120, max: 150, tf: 'essayText', sf: 'essayScores', nf: 'essayNotes', rf: 'essayReview', raf: 'essayReviewAt', editorLabel: 'あなたの英作文', copyLabel: '作文＋添削依頼をコピー' }
+      : { name: '英文要約', stats: '目安 20分 ／ 60〜70語', sec: 1200, min: 60, max: 70, tf: 'summaryText', sf: 'summaryScores', nf: 'summaryNotes', rf: 'summaryReview', raf: 'summaryReviewAt', editorLabel: 'あなたの要約', copyLabel: '要約＋添削依頼をコピー' };
 
     var card = document.createElement('div');
     card.className = 'task-card';
@@ -1181,12 +1921,14 @@
         '</div>' +
         '<div class="action-row">' +
           '<button type="button" class="action-btn" data-role="copywork">' + cfg.copyLabel + '</button>' +
-          '<span class="action-hint">コピーしてClaudeに貼れば、点数（4観点）と添削が返る</span>' +
+          '<span class="action-hint">コピーしてClaudeに貼ると、一文ずつの添削がJSONで返る</span>' +
         '</div>' +
         '<div class="grade-block">' +
-          '<div class="editor-bar" style="margin-bottom:8px;"><span class="editor-bar-label">Claudeの添削メモ（貼り付け）</span></div>' +
-          '<textarea class="feedback-input" placeholder="Claudeが返した点数・指摘をここに貼っておくと後で見返せる…"></textarea>' +
-          '<div class="grade-head" style="margin-top:14px;"><h4>Claudeが出した点数を記録（4観点×各4点＝16点）</h4><span class="grade-total"></span></div>' +
+          '<div class="editor-bar" style="margin-bottom:8px;"><span class="editor-bar-label">添削レポートを貼り付け</span></div>' +
+          '<textarea class="feedback-input" placeholder="Claudeが返した ```json … ``` をまるごと貼る。読み込めれば下に添削レポートが表示され、アーカイブにも保存されます…"></textarea>' +
+          '<div class="paste-status"></div>' +
+          '<div class="review-host"></div>' +
+          '<div class="grade-head" style="margin-top:14px;"><h4>点数の記録（4観点×各4点＝16点）</h4><span class="grade-total"></span></div>' +
           '<div class="score-grid">' + scoreRowsHtml + '</div>' +
         '</div>' +
       '</div>';
@@ -1213,7 +1955,29 @@
     });
 
     var fb = card.querySelector('.feedback-input');
+    var pasteStatus = card.querySelector('.paste-status');
+    var reviewHost = card.querySelector('.review-host');
     fb.value = d[cfg.nf] || '';
+
+    function paintReview() {
+      reviewHost.innerHTML = '';
+      var dd = getDay(entry.day);
+      if (!dd[cfg.rf]) return;
+      reviewHost.appendChild(renderReview(dd[cfg.rf], { day: entry.day, kind: kind, at: dd[cfg.raf] }));
+    }
+    function syncScoreButtons() {
+      var dd = getDay(entry.day);
+      var all = card.querySelectorAll('.score-btn');
+      Array.prototype.forEach.call(all, function (b) {
+        var crit = b.getAttribute('data-crit');
+        var val = parseInt(b.getAttribute('data-score'), 10);
+        b.classList.toggle('active', dd[cfg.sf][crit] === val);
+      });
+      var tEl = card.querySelector('.grade-total');
+      var s = scoreSum(dd[cfg.sf]);
+      if (tEl) tEl.textContent = (s === null ? '— ' : s) + ' / 16';
+    }
+
     var fbTimer = null;
     fb.addEventListener('input', function () {
       if (fbTimer) clearTimeout(fbTimer);
@@ -1221,9 +1985,54 @@
         var dd = getDay(entry.day);
         dd[cfg.nf] = fb.value;
         dd.updatedAt = Date.now();
-        saveData(data);
-      }, 200);
+        var raw = fb.value.trim();
+
+        if (!raw) {
+          dd[cfg.rf] = null; dd[cfg.raf] = null;
+          pasteStatus.className = 'paste-status';
+          pasteStatus.textContent = '';
+          saveData(data);
+          paintReview();
+          renderArchive();
+          return;
+        }
+
+        var rv = parseReviewJson(raw);
+        if (rv) {
+          dd[cfg.rf] = rv;
+          dd[cfg.raf] = Date.now();
+          var sc = normScores(rv.scores);
+          var got = false;
+          for (var i = 0; i < CRITERIA.length; i++) {
+            var k = CRITERIA[i].key;
+            if (sc[k] !== null) { dd[cfg.sf][k] = sc[k]; got = true; }
+          }
+          saveData(data);
+          if (got && hasAnyScore(entry.day)) { progress[entry.day] = true; saveProgress(progress); }
+          pasteStatus.className = 'paste-status ok';
+          pasteStatus.textContent = '添削レポートを読み込みました。点数を反映し、添削アーカイブに保存しています。';
+          paintReview();
+          syncScoreButtons();
+          renderTimeline();
+          renderHistory();
+          renderArchive();
+          refreshDoneStat();
+        } else {
+          dd[cfg.rf] = null; dd[cfg.raf] = null;
+          saveData(data);
+          pasteStatus.className = 'paste-status plain';
+          pasteStatus.textContent = 'JSONとしては読めなかったので、メモとして保存しました（点数は下のボタンで手入力してください）。';
+          paintReview();
+          renderArchive();
+        }
+      }, 300);
     });
+
+    if (d[cfg.rf]) {
+      pasteStatus.className = 'paste-status ok';
+      pasteStatus.textContent = '添削レポートを読み込み済みです。';
+    }
+    paintReview();
 
     setupTimer(card, cfg.sec);
 
@@ -1402,6 +2211,190 @@
     countEl.textContent = items.length + ' 日分';
   }
 
+  /* ===== 添削アーカイブ（ハブ） ===== */
+
+  var archiveFilter = 'all';
+  var archiveSort = 'new';
+  var archiveOpen = {};
+
+  function collectReviews() {
+    var items = [];
+    var KINDS = [
+      { kind: 'essay', rf: 'essayReview', raf: 'essayReviewAt' },
+      { kind: 'summary', rf: 'summaryReview', raf: 'summaryReviewAt' }
+    ];
+    for (var day in data) {
+      if (!data.hasOwnProperty(day)) continue;
+      var d = data[day];
+      if (!d) continue;
+      for (var i = 0; i < KINDS.length; i++) {
+        var K = KINDS[i];
+        if (!d[K.rf]) continue;
+        items.push({
+          day: parseInt(day, 10),
+          kind: K.kind,
+          review: d[K.rf],
+          at: d[K.raf] || d.updatedAt || 0,
+          total: scoreSum(normScores(d[K.rf].scores)),
+          errs: reviewErrorCount(d[K.rf])
+        });
+      }
+    }
+    return items;
+  }
+
+  function archiveItems() {
+    var items = collectReviews().filter(function (it) {
+      return archiveFilter === 'all' || it.kind === archiveFilter;
+    });
+    if (archiveSort === 'low') {
+      items.sort(function (a, b) {
+        var ta = (a.total === null ? 99 : a.total), tb = (b.total === null ? 99 : b.total);
+        if (ta !== tb) return ta - tb;
+        return (b.at || 0) - (a.at || 0);
+      });
+    } else {
+      items.sort(function (a, b) {
+        if ((b.at || 0) !== (a.at || 0)) return (b.at || 0) - (a.at || 0);
+        return b.day - a.day;
+      });
+    }
+    return items;
+  }
+
+  function renderArchive() {
+    var listEl = document.getElementById('archiveList');
+    if (!listEl) return;
+    var countEl = document.getElementById('archiveCount');
+    var tabCount = document.getElementById('tabArchiveCount');
+    var all = collectReviews();
+    if (tabCount) tabCount.textContent = all.length ? String(all.length) : '';
+    var items = archiveItems();
+    if (countEl) countEl.textContent = all.length ? (items.length + ' 件 ／ 全 ' + all.length + ' 件') : '—';
+
+    listEl.innerHTML = '';
+    if (!items.length) {
+      var empty = document.createElement('div');
+      empty.className = 'arc-empty';
+      empty.innerHTML = all.length
+        ? 'この条件に合う添削レポートはありません。'
+        : 'まだ添削レポートがありません。<br>「今日のタスク」で作文を書き、添削依頼をコピーしてClaudeに貼り、<br>返ってきたJSONを貼り付け欄に戻すと、ここにたまっていきます。';
+      listEl.appendChild(empty);
+      return;
+    }
+
+    items.forEach(function (it) {
+      var key = it.day + '-' + it.kind;
+      var fe = entryFor(it.day);
+      var topic = it.review.topic || (it.kind === 'essay' && fe && fe.topic ? fe.topic.en : '');
+      var wrap = document.createElement('div');
+      wrap.className = 'arc-item' + (archiveOpen[key] ? ' is-open' : '');
+
+      var head = document.createElement('button');
+      head.type = 'button';
+      head.className = 'arc-head';
+      head.innerHTML =
+        '<span class="arc-day">DAY ' + it.day + '</span>' +
+        '<span class="arc-kind">' + (it.kind === 'essay' ? '意見論述' : '英文要約') + '</span>' +
+        '<span class="arc-topic">' + escapeHtml(topic || '—') + '</span>' +
+        (it.errs ? '<span class="arc-errs">指摘 ' + it.errs + '</span>' : '') +
+        '<span class="arc-score"><b>' + (it.total === null ? '—' : it.total) + '</b> / 16</span>' +
+        '<span class="arc-chev">›</span>';
+
+      var panel = document.createElement('div');
+      panel.className = 'arc-panel';
+      panel.style.display = archiveOpen[key] ? '' : 'none';
+      if (archiveOpen[key]) {
+        panel.appendChild(renderReview(it.review, { day: it.day, kind: it.kind, at: it.at }));
+      }
+      head.addEventListener('click', function () {
+        var open = !archiveOpen[key];
+        archiveOpen[key] = open;
+        wrap.classList.toggle('is-open', open);
+        panel.style.display = open ? '' : 'none';
+        if (open && !panel.firstChild) {
+          panel.appendChild(renderReview(it.review, { day: it.day, kind: it.kind, at: it.at }));
+        }
+      });
+
+      wrap.appendChild(head);
+      wrap.appendChild(panel);
+      listEl.appendChild(wrap);
+    });
+  }
+
+  function setupArchiveUI() {
+    var filters = document.getElementById('archiveFilters');
+    if (filters) {
+      filters.addEventListener('click', function (e) {
+        var b = e.target.closest && e.target.closest('[data-filter]');
+        if (!b) return;
+        archiveFilter = b.getAttribute('data-filter');
+        Array.prototype.forEach.call(filters.querySelectorAll('[data-filter]'), function (x) {
+          x.classList.toggle('is-active', x === b);
+        });
+        renderArchive();
+      });
+    }
+    var sorts = document.getElementById('archiveSorts');
+    if (sorts) {
+      sorts.addEventListener('click', function (e) {
+        var b = e.target.closest && e.target.closest('[data-sort]');
+        if (!b) return;
+        archiveSort = b.getAttribute('data-sort');
+        Array.prototype.forEach.call(sorts.querySelectorAll('[data-sort]'), function (x) {
+          x.classList.toggle('is-active', x === b);
+        });
+        renderArchive();
+      });
+    }
+    var printAll = document.getElementById('archivePrintAll');
+    if (printAll) {
+      printAll.addEventListener('click', function () {
+        var items = archiveItems();
+        if (!items.length) {
+          printAll.textContent = '印刷できるレポートがありません';
+          setTimeout(function () { printAll.textContent = 'まとめて印刷・PDF'; }, 1800);
+          return;
+        }
+        var nodes = items.map(function (it) {
+          return renderReview(it.review, { day: it.day, kind: it.kind, at: it.at });
+        });
+        printNodes(nodes, '英検準1級 ライティング添削アーカイブ（' + items.length + '件）');
+      });
+    }
+    var tabs = document.getElementById('viewTabs');
+    if (tabs) {
+      tabs.addEventListener('click', function (e) {
+        var b = e.target.closest && e.target.closest('[data-view]');
+        if (!b) return;
+        setView(b.getAttribute('data-view'), true);
+      });
+    }
+    window.addEventListener('hashchange', function () {
+      setView(location.hash === '#reviews' ? 'archive' : 'today', false);
+    });
+  }
+
+  function setView(name, updateHash) {
+    var isArc = (name === 'archive');
+    var todayEl = document.getElementById('viewToday');
+    var arcEl = document.getElementById('viewArchive');
+    if (todayEl) todayEl.style.display = isArc ? 'none' : '';
+    if (arcEl) arcEl.style.display = isArc ? '' : 'none';
+    Array.prototype.forEach.call(document.querySelectorAll('.view-tab'), function (b) {
+      b.classList.toggle('is-active', b.getAttribute('data-view') === (isArc ? 'archive' : 'today'));
+    });
+    if (isArc) renderArchive();
+    if (updateHash) {
+      try {
+        if (isArc) location.hash = '#reviews';
+        else if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+      } catch (e) {}
+    }
+    if (isArc && arcEl) window.scrollTo(0, 0);
+  }
+
   function renderTimeline() {
     var container = document.getElementById('timeline');
     container.innerHTML = '';
@@ -1472,6 +2465,7 @@
 
   setupSyncUI();
   updateSyncUI();
+  setupArchiveUI();
 
   function boot() {
     if (syncCode) {
@@ -1494,5 +2488,6 @@
     }
   }
   boot();
+  setView(location.hash === '#reviews' ? 'archive' : 'today', false);
 })();
 </script>
