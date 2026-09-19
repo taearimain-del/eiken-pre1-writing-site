@@ -3,6 +3,7 @@
 <title>英検準1級 ライティング特訓 — 今日のタスク</title>
 <style>html{visibility:hidden}</style>
 <script src="https://my-portal-ryu.netlify.app/access-gate.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.14.0/html2pdf.bundle.min.js" integrity="sha512-+9GoO5OUX2MmPRHUH5dnOY+KGReMLcxywEvQxvAI0y5JxXh/lkz99dKj4xdYfODP3dMFsoZRz4CF/vHcaqa2Ag==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <style>
   @font-face {
     font-family: 'Source Serif 4';
@@ -964,7 +965,7 @@
           <button type="button" class="rv-chip is-active" data-sort="new">新しい順</button>
           <button type="button" class="rv-chip" data-sort="low">点数が低い順</button>
         </div>
-        <button type="button" class="rv-chip" id="archivePrintAll">まとめて印刷・PDF</button>
+        <button type="button" class="rv-chip" id="archivePrintAll">まとめてPDFで保存</button>
       </div>
       <div id="archiveList"></div>
     </div>
@@ -1877,7 +1878,7 @@
         sec('模範解答', modelHtml) +
         sec('使える表現', phraseHtml) +
         '<div class="rv-foot">' +
-          '<button type="button" class="rv-chip" data-role="print-review">このレポートを印刷・PDFで保存</button>' +
+          '<button type="button" class="rv-chip" data-role="print-review">このレポートをPDFで保存</button>' +
         '</div>' +
       '</div>';
 
@@ -1892,16 +1893,17 @@
     var printBtn = el.querySelector('[data-role="print-review"]');
     if (printBtn) {
       printBtn.addEventListener('click', function () {
-        printNodes([el], '英検準1級 ライティング添削レポート' + (meta.day ? '　DAY ' + meta.day : '') + '　' + kindLabel);
+        printNodes([el], '英検準1級 ライティング添削レポート' + (meta.day ? '　DAY ' + meta.day : '') + '　' + kindLabel, printBtn);
       });
     }
     return el;
   }
 
-  // 印刷は本体DOMを触らず、複製を印刷用ホストに置いて刷る
-  function printNodes(nodes, title) {
+  // PDF化は本体DOMを触らず、複製を印刷用ホストに置いてhtml2pdfで書き出す
+  // window.print()を経由しないため、ブラウザが付与する日付/URLのヘッダー・フッターは出ない
+  function printNodes(nodes, title, btn) {
     var host = document.getElementById('printHost');
-    if (!host) { window.print(); return; }
+    if (!host || typeof html2pdf === 'undefined') { window.print(); return; }
     host.innerHTML = '';
     if (title) {
       var t = document.createElement('div');
@@ -1909,24 +1911,41 @@
       t.textContent = title;
       host.appendChild(t);
     }
-    nodes.forEach(function (n) {
+    nodes.forEach(function (n, i) {
+      if (i > 0) {
+        var brk = document.createElement('div');
+        brk.style.cssText = 'page-break-before:always; break-before:page;';
+        host.appendChild(brk);
+      }
       var c = n.cloneNode(true);
       var box = c.querySelector('.rv-sents');
       if (box) box.classList.remove('hide-ok');
       host.appendChild(c);
     });
+    host.style.cssText = 'display:block; position:fixed; left:-99999px; top:0; width:720px; background:#fff;';
     document.body.classList.add('printing-one');
+    var btnOrigText = btn ? btn.textContent : null;
+    if (btn) { btn.disabled = true; btn.textContent = 'PDFを作成中…'; }
     var cleaned = false;
     var cleanup = function () {
       if (cleaned) return;
       cleaned = true;
       document.body.classList.remove('printing-one');
+      host.style.cssText = '';
       host.innerHTML = '';
-      window.removeEventListener('afterprint', cleanup);
+      if (btn) { btn.disabled = false; btn.textContent = btnOrigText; }
     };
-    window.addEventListener('afterprint', cleanup);
-    window.print();
-    setTimeout(cleanup, 2000);
+    html2pdf().set({
+      margin: [14, 12, 14, 12],
+      filename: (title || '英検準1級ライティング添削レポート').replace(/[\\/:*?"<>|]/g, '') + '.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['css', 'legacy'] }
+    }).from(host).save().then(cleanup).catch(function () {
+      cleanup();
+      window.print();
+    });
   }
 
   function setupTimer(card, totalSec) {
@@ -2549,14 +2568,14 @@
       printAll.addEventListener('click', function () {
         var items = archiveItems();
         if (!items.length) {
-          printAll.textContent = '印刷できるレポートがありません';
-          setTimeout(function () { printAll.textContent = 'まとめて印刷・PDF'; }, 1800);
+          printAll.textContent = 'PDFにできるレポートがありません';
+          setTimeout(function () { printAll.textContent = 'まとめてPDFで保存'; }, 1800);
           return;
         }
         var nodes = items.map(function (it) {
           return renderReview(it.review, { day: it.day, kind: it.kind, at: it.at });
         });
-        printNodes(nodes, '英検準1級 ライティング添削アーカイブ（' + items.length + '件）');
+        printNodes(nodes, '英検準1級 ライティング添削アーカイブ（' + items.length + '件）', printAll);
       });
     }
     var tabs = document.getElementById('viewTabs');
