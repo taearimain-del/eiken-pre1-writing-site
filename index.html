@@ -846,11 +846,26 @@
   #printHost .rv-score-row, #printHost .rv-wc, #printHost .rv-reason,
   #printHost .rv-sec-title { break-inside: avoid; page-break-inside: avoid; }
   #printHost .rv-foot { display: none; }
-  /* 個別レポートPDF：横向きA4の広い幅を使い、一文カードを2列にしてページ数を抑える */
+  /* 個別レポートPDF：横向きA4の広い幅を使い、一文カードを3列＋コンパクトな文字サイズで
+     できるだけ少ないページ数（目安2ページ＝両面印刷で1枚）に収める */
   #printHost.print-wide .rv-sents {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; align-items: start;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px 10px; align-items: start;
   }
-  #printHost.print-wide .rv-sents > .rv-sent { margin-bottom: 0; }
+  #printHost.print-wide .rv-sents > .rv-sent { margin-bottom: 0; padding: 7px 9px; }
+  #printHost.print-wide .rv-sent-no { font-size: 9px; margin-bottom: 3px; }
+  #printHost.print-wide .rv-orig,
+  #printHost.print-wide .rv-fix { font-size: 10.5px; line-height: 1.45; }
+  #printHost.print-wide .rv-fix { margin-top: 5px; padding-top: 5px; }
+  #printHost.print-wide .rv-note { font-size: 9px; line-height: 1.4; gap: 5px; }
+  #printHost.print-wide .rv-comment { font-size: 9.5px; line-height: 1.4; padding: 5px 7px; margin-top: 6px; }
+  #printHost.print-wide .rv-better { font-size: 9.5px; line-height: 1.4; margin-top: 5px; }
+  #printHost.print-wide .rv-imp { padding: 7px 9px; margin-bottom: 6px; }
+  #printHost.print-wide .rv-imp-title { font-size: 11px; }
+  #printHost.print-wide .rv-model { font-size: 10.5px; line-height: 1.45; padding: 8px 10px; }
+  #printHost.print-wide .rv-model-note { font-size: 9.5px; margin-top: 6px; }
+  #printHost.print-wide .rv-phrase-en,
+  #printHost.print-wide .rv-phrase-ja { font-size: 10px; }
+  #printHost.print-wide .rv-sec { margin-top: 10px; }
 </style>
 
 <div class="wrap">
@@ -1939,7 +1954,7 @@
     var wrapOrigDisplay = wrap ? wrap.style.display : '';
     if (wrap) wrap.style.display = 'none';
     host.className = landscape ? 'print-wide' : '';
-    host.style.cssText = 'display:block; width:' + (landscape ? '1030' : '720') + 'px; background:#fff;';
+    host.style.cssText = 'display:block; width:' + (landscape ? '1062' : '720') + 'px; background:#fff;';
     document.body.classList.add('printing-one');
     var btnOrigText = btn ? btn.textContent : null;
     if (btn) { btn.disabled = true; btn.textContent = 'PDFを作成中…'; }
@@ -1958,7 +1973,7 @@
     // ブラウザ側で継続する可能性があるが、画面が「作成中」のまま固まるのを防ぐ）
     var safetyTimer = setTimeout(cleanup, 30000);
     html2pdf().set({
-      margin: landscape ? [10, 12, 10, 12] : [14, 12, 14, 12],
+      margin: landscape ? [8, 8, 8, 8] : [14, 12, 14, 12],
       filename: (title || '英検準1級ライティング添削レポート').replace(/[\\/:*?"<>|]/g, '') + '.pdf',
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
