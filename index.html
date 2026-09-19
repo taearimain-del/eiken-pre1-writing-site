@@ -845,6 +845,11 @@
   #printHost .rv-sent, #printHost .rv-imp, #printHost .rv-model,
   #printHost .rv-score-row, #printHost .rv-wc, #printHost .rv-reason,
   #printHost .rv-sec-title { break-inside: avoid; page-break-inside: avoid; }
+  /* 個別レポートPDF：横向きA4の広い幅を使い、一文カードを2列にしてページ数を抑える */
+  #printHost.print-wide .rv-sents {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; align-items: start;
+  }
+  #printHost.print-wide .rv-sents > .rv-sent { margin-bottom: 0; }
 </style>
 
 <div class="wrap">
@@ -1897,7 +1902,7 @@
     var printBtn = el.querySelector('[data-role="print-review"]');
     if (printBtn) {
       printBtn.addEventListener('click', function () {
-        printNodes([el], '英検準1級 ライティング添削レポート' + (meta.day ? '　DAY ' + meta.day : '') + '　' + kindLabel, printBtn);
+        printNodes([el], '英検準1級 ライティング添削レポート' + (meta.day ? '　DAY ' + meta.day : '') + '　' + kindLabel, printBtn, { landscape: true });
       });
     }
     return el;
@@ -1905,7 +1910,8 @@
 
   // PDF化は本体DOMを触らず、複製を印刷用ホストに置いてhtml2pdfで書き出す
   // window.print()を経由しないため、ブラウザが付与する日付/URLのヘッダー・フッターは出ない
-  function printNodes(nodes, title, btn) {
+  function printNodes(nodes, title, btn, opts) {
+    var landscape = !!(opts && opts.landscape);
     var host = document.getElementById('printHost');
     if (!host || typeof html2pdf === 'undefined') { window.print(); return; }
     host.innerHTML = '';
@@ -1931,7 +1937,8 @@
     var wrap = document.querySelector('.wrap');
     var wrapOrigDisplay = wrap ? wrap.style.display : '';
     if (wrap) wrap.style.display = 'none';
-    host.style.cssText = 'display:block; width:720px; background:#fff;';
+    host.className = landscape ? 'print-wide' : '';
+    host.style.cssText = 'display:block; width:' + (landscape ? '1030' : '720') + 'px; background:#fff;';
     document.body.classList.add('printing-one');
     var btnOrigText = btn ? btn.textContent : null;
     if (btn) { btn.disabled = true; btn.textContent = 'PDFを作成中…'; }
@@ -1941,6 +1948,7 @@
       cleaned = true;
       document.body.classList.remove('printing-one');
       host.style.cssText = '';
+      host.className = '';
       host.innerHTML = '';
       if (wrap) wrap.style.display = wrapOrigDisplay;
       if (btn) { btn.disabled = false; btn.textContent = btnOrigText; }
@@ -1949,11 +1957,11 @@
     // ブラウザ側で継続する可能性があるが、画面が「作成中」のまま固まるのを防ぐ）
     var safetyTimer = setTimeout(cleanup, 30000);
     html2pdf().set({
-      margin: [14, 12, 14, 12],
+      margin: landscape ? [10, 12, 10, 12] : [14, 12, 14, 12],
       filename: (title || '英検準1級ライティング添削レポート').replace(/[\\/:*?"<>|]/g, '') + '.pdf',
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: landscape ? 'landscape' : 'portrait' },
       pagebreak: { mode: ['css', 'legacy'] }
     }).from(host).save().then(function () {
       clearTimeout(safetyTimer);
