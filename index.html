@@ -841,6 +841,10 @@
     }
   }
   #printHost { display: none; }
+  /* PDF化(html2canvas)は@media printではないため、改ページ回避は常時有効なルールとして持つ */
+  #printHost .rv-sent, #printHost .rv-imp, #printHost .rv-model,
+  #printHost .rv-score-row, #printHost .rv-wc, #printHost .rv-reason,
+  #printHost .rv-sec-title { break-inside: avoid; page-break-inside: avoid; }
 </style>
 
 <div class="wrap">
