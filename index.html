@@ -418,6 +418,34 @@
   .summary-passage p { margin: 0 0 10px; }
   .summary-passage p:last-child { margin-bottom: 0; }
 
+  /* ---------- custom topic/summary pool ---------- */
+  .custom-pool-block {
+    margin-top: 10px;
+    background: var(--surface-2);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+  }
+  .custom-pool-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+  .custom-pool-item {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    font-size: 12.5px; color: var(--text);
+    border-bottom: 1px solid var(--border); padding-bottom: 6px;
+  }
+  .custom-pool-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .custom-pool-item-label { flex: 1; min-width: 140px; }
+  .custom-pool-form { display: flex; flex-direction: column; gap: 8px; }
+  input.custom-pool-input, textarea.custom-pool-textarea {
+    width: 100%; box-sizing: border-box;
+    font-family: var(--font-body); font-size: 14px; color: var(--text);
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 10px 12px;
+  }
+  textarea.custom-pool-textarea { min-height: 100px; resize: vertical; line-height: 1.6; }
+  input.custom-pool-input:focus, textarea.custom-pool-textarea:focus {
+    outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent;
+  }
+
   /* ---------- grading / scores ---------- */
   .grade-block { margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border-strong); }
   .grade-head {
@@ -956,7 +984,7 @@
   var STORAGE_KEY = 'eiken-pre1-writing-progress-v1';
   var ASSIGN_KEY = 'eiken-pre1-writing-assign-v1';
 
-  var topics = [
+  var baseTopics = [
     { en: 'Should schools ban the use of smartphones during school hours?', points: ['Concentration','Safety','Communication','Bullying'] },
     { en: 'Agree or disagree: Genetic testing for diseases should be widely available to the public', points: ['Health','Cost','Privacy','Insurance'] },
     { en: 'Should the death penalty be abolished in Japan?', points: ['Deterrence','Human rights','Wrongful conviction','Public opinion'] },
@@ -989,7 +1017,7 @@
     { en: 'Should university students be required to study abroad?', points: ['Language skills','Cost','Independence','Career'] }
   ];
 
-  var summaries = [
+  var baseSummaries = [
     'Telemedicine refers to medical consultations conducted remotely through video calls or phone calls rather than in-person visits. Since the COVID-19 pandemic, its use has expanded rapidly around the world, and many hospitals and clinics now offer virtual appointments as a standard option for patients.\n\nOne major advantage of telemedicine is that it improves access to healthcare, especially for people living in rural areas or those with limited mobility. Patients no longer need to travel long distances or wait in crowded waiting rooms to see a doctor. In fact, some healthcare providers report that video consultations can reduce average waiting times from several weeks to just a few days, and some rural clinics have used the technology to reach patients who previously had no local doctor at all.\n\nHowever, critics point out that this shift toward remote care may not benefit everyone equally. Elderly patients or those unfamiliar with technology may struggle to use video-calling systems, potentially widening the gap in healthcare access rather than closing it. A recent survey found that nearly a quarter of patients over the age of 70 had difficulty completing a video appointment without assistance, often requiring help from a family member just to log in.',
     'Vertical farming involves growing crops in stacked layers inside buildings, often using artificial lighting and controlled environments instead of traditional outdoor fields. As urban populations continue to grow and available farmland shrinks, more companies are turning to this technology to produce food closer to consumers.\n\nSupporters argue that vertical farms use significantly less water than conventional agriculture, since the water can be recycled within a closed system. Furthermore, because crops are grown indoors, they are protected from unpredictable weather and pests, which can lead to more stable year-round production regardless of the season. Some vertical farms report using up to 95 percent less water than traditional soil-based farming methods.\n\nOn the other hand, critics note that vertical farms require large amounts of electricity to power the lighting and climate-control systems, making the initial investment and running costs extremely high. Additionally, the range of crops that can be grown profitably is currently limited mostly to leafy greens and herbs, meaning vertical farms cannot yet replace traditional farming for staple foods like rice or wheat. Industry estimates suggest that the electricity costs of a typical vertical farm can account for nearly a third of its total operating expenses.',
     'The gig economy refers to a labor market in which people work short-term or freelance jobs, often found through smartphone apps, rather than holding traditional full-time positions. Ridesharing drivers and food delivery couriers are common examples of gig workers, and this type of work has grown enormously over the past decade.\n\nProponents of the gig economy emphasize the flexibility it offers. Workers can choose their own hours and take on as much or as little work as they want, which is especially appealing to students and people with other responsibilities. Furthermore, gig work can provide an accessible source of income for those who might otherwise struggle to find employment.\n\nHowever, critics argue that gig workers often lack basic protections such as health insurance, paid leave, and a guaranteed minimum wage, since companies frequently classify them as independent contractors rather than employees. In addition, income from gig work can be unpredictable, making it difficult for workers to plan their finances or qualify for loans. Studies indicate that many gig workers earn less than the minimum wage once expenses such as fuel and vehicle maintenance are taken into account.',
@@ -1021,6 +1049,85 @@
     'In response to concerns about widespread consumer debt and inadequate retirement savings, some countries have begun requiring schools to teach financial literacy, including topics such as budgeting, taxes, and investing, as part of the standard curriculum.\n\nSupporters argue that teaching these practical skills early prepares students to make informed financial decisions throughout their lives, potentially reducing rates of debt and bankruptcy in the future. Additionally, proponents claim that financial literacy education could help address economic inequality by giving all students, regardless of family background, access to essential knowledge. Studies in some countries where financial literacy is mandatory have found that graduates carry lower average credit card debt than those from schools without such programs.\n\nCritics, however, argue that already crowded school curriculums leave little room for an additional mandatory subject, potentially forcing schools to reduce time spent on other important subjects. In addition, some educators question whether teenagers can truly grasp complex financial concepts before they have real-world experience managing their own money. Some teachers report that fitting a new mandatory subject into an already packed schedule often means reducing time spent on other subjects, such as art or physical education.',
     'Congestion pricing is a policy in which drivers are charged a fee to enter designated zones in a city center, typically during peak traffic hours. Cities such as London and Singapore have implemented this system for years, and other major cities are now considering similar measures.\n\nSupporters argue that congestion pricing effectively reduces traffic jams and air pollution by encouraging drivers to use public transportation instead of private vehicles. What is more, the revenue collected from these fees can be reinvested into improving public transit systems, creating a cycle of continued improvement. After introducing congestion pricing, London reported a significant drop in traffic volume within the charging zone during the first few years of the program.\n\nCritics, however, argue that congestion pricing unfairly burdens lower-income drivers who cannot easily switch to public transportation, particularly those without convenient access to buses or trains. In addition, some business owners worry that charging drivers to enter city centers could discourage customers from visiting shops and restaurants, hurting local commerce. Small business owners in some affected areas have reported a decline in customer visits, though city officials argue that improved public transit has offset much of this effect.'
   ];
+
+  // 自分で追加したお題（意見論述TOPIC＋要約原文）。localStorageに保存し、既定プールの末尾に連結して再利用する。
+  var CUSTOM_TOPICS_KEY = 'eiken-pre1-writing-custom-topics-v1';
+  var CUSTOM_SUMMARIES_KEY = 'eiken-pre1-writing-custom-summaries-v1';
+  function loadCustomTopics() {
+    try { var v = JSON.parse(localStorage.getItem(CUSTOM_TOPICS_KEY) || '[]'); return Array.isArray(v) ? v : []; }
+    catch (e) { return []; }
+  }
+  function loadCustomSummaries() {
+    try { var v = JSON.parse(localStorage.getItem(CUSTOM_SUMMARIES_KEY) || '[]'); return Array.isArray(v) ? v : []; }
+    catch (e) { return []; }
+  }
+  var customTopics = loadCustomTopics();
+  var customSummaries = loadCustomSummaries();
+  var topics, summaries;
+  // 既定プール＋自分の追加分で topics/summaries を再構築する。追加・削除のたびに呼ぶ。
+  function rebuildPools() {
+    topics = baseTopics.concat(customTopics);
+    summaries = baseSummaries.concat(customSummaries);
+  }
+  rebuildPools();
+  function saveCustomTopics() {
+    try { localStorage.setItem(CUSTOM_TOPICS_KEY, JSON.stringify(customTopics)); } catch (e) {}
+    rebuildPools();
+    schedulePush();
+  }
+  function saveCustomSummaries() {
+    try { localStorage.setItem(CUSTOM_SUMMARIES_KEY, JSON.stringify(customSummaries)); } catch (e) {}
+    rebuildPools();
+    schedulePush();
+  }
+  // 追加・削除でプールサイズが変わった時、assign内のindexのズレを補正する。
+  // removedIdx: 削除したグローバルindex（追加のときはnullで補正なしのまま呼ぶ）。
+  function fixAssignAfterPoolChange(field, removedIdx, newPoolSize) {
+    var needsReassign = [];
+    for (var day in assign) {
+      if (!assign[day] || typeof assign[day][field] !== 'number') continue;
+      var v = assign[day][field];
+      if (removedIdx !== null && v === removedIdx) {
+        delete assign[day][field];
+        needsReassign.push(Number(day));
+      } else if (removedIdx !== null && v > removedIdx) {
+        assign[day][field] = v - 1;
+      }
+    }
+    var used = {};
+    for (var k in assign) { if (assign[k] && typeof assign[k][field] === 'number') used[assign[k][field]] = true; }
+    needsReassign.forEach(function (day) {
+      var ni = pickUnused(used, newPoolSize, day - 1);
+      var val = ni >= 0 ? ni : (day - 1) % newPoolSize;
+      assign[day][field] = val;
+      used[val] = true;
+    });
+    saveAssign();
+  }
+  function addCustomTopic(en, pointsText) {
+    var points = pointsText.split(/[、,\n]/).map(function (s) { return s.trim(); }).filter(Boolean);
+    if (!points.length) points = ['Point 1', 'Point 2', 'Point 3', 'Point 4'];
+    customTopics.push({ en: en.trim(), points: points });
+    saveCustomTopics();
+    return topics.length - 1; // 追加した項目のグローバルindex
+  }
+  function addCustomSummary(text) {
+    customSummaries.push(text.trim());
+    saveCustomSummaries();
+    return summaries.length - 1;
+  }
+  function removeCustomTopic(customIdx) {
+    var removedGlobalIdx = baseTopics.length + customIdx;
+    customTopics.splice(customIdx, 1);
+    saveCustomTopics();
+    fixAssignAfterPoolChange('topicIdx', removedGlobalIdx, topics.length);
+  }
+  function removeCustomSummary(customIdx) {
+    var removedGlobalIdx = baseSummaries.length + customIdx;
+    customSummaries.splice(customIdx, 1);
+    saveCustomSummaries();
+    fixAssignAfterPoolChange('summaryIdx', removedGlobalIdx, summaries.length);
+  }
 
   var phaseInfo = {
     phase1: { label: '型を固める', short: '型', note: 'テンプレを見ながらでOK。今日中に型を体に入れる。' },
@@ -1881,7 +1988,16 @@
         '<div class="task-hint">POINTSは4つのうち2つを選び、言い換えて使う。序論で意見と理由を予告 → First → Second → In conclusion の4段落。</div>' +
         (entry.note ? '<div class="task-note">' + escapeHtml(entry.note) + '</div>' : '') +
         '<div class="action-row" style="margin-top:10px;"><button type="button" class="action-btn subtle-btn" data-role="swap-topic">別のお題にする</button>' +
-        '<span class="action-hint">他の教材で同じお題を先にやってしまった時などに</span></div>';
+        '<button type="button" class="action-btn subtle-btn" data-role="toggle-custom-topic">自分のお題を使う</button>' +
+        '<span class="action-hint">他の教材で同じお題を先にやってしまった時などに</span></div>' +
+        '<div class="custom-pool-block" data-role="custom-topic-block" hidden>' +
+          '<div class="custom-pool-list" data-role="custom-topic-list"></div>' +
+          '<div class="custom-pool-form">' +
+            '<input type="text" class="custom-pool-input" data-role="custom-topic-en" placeholder="TOPIC文（英語）を入力">' +
+            '<input type="text" class="custom-pool-input" data-role="custom-topic-points" placeholder="POINTS（カンマ・改行区切りで3〜4個）">' +
+            '<button type="button" class="action-btn" data-role="add-custom-topic">このお題を保存して今日に使う</button>' +
+          '</div>' +
+        '</div>';
     } else {
       var paragraphsHtml = String(entry.summaryText || '').split('\n\n').map(function (p) {
         return '<p>' + escapeHtml(p) + '</p>';
@@ -1890,7 +2006,15 @@
         '<div class="task-hint" style="margin-top:0;">以下の英文（約200語）を読み、60〜70語の英語に要約する。本文の語句はそのまま写さず、必ず自分の言葉に言い換える。</div>' +
         '<div class="summary-passage">' + paragraphsHtml + '</div>' +
         '<div class="action-row" style="margin-top:10px;"><button type="button" class="action-btn subtle-btn" data-role="swap-summary">別の問題にする</button>' +
-        '<span class="action-hint">他の教材で同じ問題を先にやってしまった時などに</span></div>';
+        '<button type="button" class="action-btn subtle-btn" data-role="toggle-custom-summary">自分の英文を使う</button>' +
+        '<span class="action-hint">他の教材で同じ問題を先にやってしまった時などに</span></div>' +
+        '<div class="custom-pool-block" data-role="custom-summary-block" hidden>' +
+          '<div class="custom-pool-list" data-role="custom-summary-list"></div>' +
+          '<div class="custom-pool-form">' +
+            '<textarea class="custom-pool-textarea" data-role="custom-summary-text" placeholder="要約したい英文を貼り付け（段落は空行で区切る）"></textarea>' +
+            '<button type="button" class="action-btn" data-role="add-custom-summary">この英文を保存して今日に使う</button>' +
+          '</div>' +
+        '</div>';
     }
 
     var scoreRowsHtml = CRITERIA.map(function (c) {
@@ -2056,6 +2180,76 @@
         render();
       });
     }
+
+    // ---- 自分のお題（意見論述TOPIC／要約原文）の追加・一覧・削除 ----
+    (function setupCustomPool() {
+      var toggleBtn = card.querySelector(isEssay ? '[data-role="toggle-custom-topic"]' : '[data-role="toggle-custom-summary"]');
+      var block = card.querySelector(isEssay ? '[data-role="custom-topic-block"]' : '[data-role="custom-summary-block"]');
+      var listEl = card.querySelector(isEssay ? '[data-role="custom-topic-list"]' : '[data-role="custom-summary-list"]');
+      if (!toggleBtn || !block || !listEl) return;
+
+      function renderList() {
+        var pool = isEssay ? customTopics : customSummaries;
+        if (!pool.length) {
+          listEl.innerHTML = '<div class="action-hint">まだ保存済みのお題はありません。下のフォームから追加すると、次回以降も選べます。</div>';
+          return;
+        }
+        listEl.innerHTML = pool.map(function (item, idx) {
+          var label = isEssay ? item.en : (item.split(/\n+/)[0].slice(0, 70) + (item.length > 70 ? '…' : ''));
+          return '<div class="custom-pool-item">' +
+            '<span class="custom-pool-item-label">' + escapeHtml(label) + '</span>' +
+            '<button type="button" class="action-btn subtle-btn" data-custom-use="' + idx + '">今日に使う</button>' +
+            '<button type="button" class="action-btn subtle-btn" data-custom-del="' + idx + '">削除</button>' +
+          '</div>';
+        }).join('');
+        Array.prototype.forEach.call(listEl.querySelectorAll('[data-custom-use]'), function (btn) {
+          btn.addEventListener('click', function () {
+            var idx = Number(btn.getAttribute('data-custom-use'));
+            if (isEssay) {
+              assign[entry.day].topicIdx = baseTopics.length + idx;
+            } else {
+              assign[entry.day].summaryIdx = baseSummaries.length + idx;
+            }
+            saveAssign();
+            render();
+          });
+        });
+        Array.prototype.forEach.call(listEl.querySelectorAll('[data-custom-del]'), function (btn) {
+          btn.addEventListener('click', function () {
+            var idx = Number(btn.getAttribute('data-custom-del'));
+            if (isEssay) removeCustomTopic(idx); else removeCustomSummary(idx);
+            render();
+          });
+        });
+      }
+
+      toggleBtn.addEventListener('click', function () {
+        block.hidden = !block.hidden;
+        if (!block.hidden) renderList();
+      });
+
+      var addBtn = card.querySelector(isEssay ? '[data-role="add-custom-topic"]' : '[data-role="add-custom-summary"]');
+      addBtn.addEventListener('click', function () {
+        if (isEssay) {
+          var enInput = card.querySelector('[data-role="custom-topic-en"]');
+          var ptInput = card.querySelector('[data-role="custom-topic-points"]');
+          var en = enInput.value.trim();
+          if (!en) { enInput.focus(); return; }
+          var idx = addCustomTopic(en, ptInput.value);
+          assign[entry.day].topicIdx = idx;
+          saveAssign();
+          render();
+        } else {
+          var txtInput = card.querySelector('[data-role="custom-summary-text"]');
+          var txt = txtInput.value.trim();
+          if (!txt) { txtInput.focus(); return; }
+          var sidx = addCustomSummary(txt);
+          assign[entry.day].summaryIdx = sidx;
+          saveAssign();
+          render();
+        }
+      });
+    })();
 
     var totalEl = card.querySelector('.grade-total');
     function updateTotal() {
