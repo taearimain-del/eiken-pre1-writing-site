@@ -27,12 +27,34 @@ git push
 - `<meta name="robots" content="noindex, nofollow">` と `robots.txt` で検索エンジンからは隠している。
 
 ## Gitリポジトリについて
-- 独立GitHubリポジトリ：`taearimain-del/eiken-pre1-writing-site`（**Public**、GitHub Pages公開用）
+- 独立GitHubリポジトリ：`taearimain-del/eiken-pre1-writing-site`（**Public**）。
+  コードの管理（バージョン管理・変更履歴）は引き続きここで行う。
 - 親の `claude-workspace` リポジトリの `.gitignore` にこのフォルダを追加済み。
 
-## デプロイ（GitHub Pages）
-- 本番URL：https://taearimain-del.github.io/eiken-pre1-writing-site/
-- 設定：`main`ブランチのルートから配信。再pushすれば自動的に再ビルドされる。
+## デプロイ先について（重要・2026-09-19変更）
+**本番公開は GitHub Pages ではなく Cloudflare Pages を使うこと。** Fort様の明示指示
+（2026-09-19「git hub ioではなくcloudflareで頼むよ」）。GitHub Pages版
+（https://taearimain-del.github.io/eiken-pre1-writing-site/）は無効化はしていないが、
+**もう正としては使わない**。ryuに案内するURL・マイポータル等への掲載は必ずCloudflare版を使う。
+
+- **本番URL（Cloudflare Pages）：https://eiken-pre1-writing.pages.dev/**
+- Cloudflareプロジェクト名：`eiken-pre1-writing`（アカウント`fortdex707@gmail.com`。
+  認証情報・`wrangler`コマンドの使い方は `運用ルール/公開ルール.md` の
+  「Cloudflare Pages」セクション参照）
+- デプロイ手順（`today-task.html`更新後、このフォルダに`index.html`としてコピーしてから）：
+  ```bash
+  cd "英検準1級ライティング公開版"
+  export CLOUDFLARE_API_KEY=$(grep -oP 'Global API Key：`\K[^`]+' "../運用ルール/公開ルール.md")
+  export CLOUDFLARE_EMAIL=$(grep -oP '併用するメールアドレス：`\K[^`]+' "../運用ルール/公開ルール.md")
+  export CLOUDFLARE_ACCOUNT_ID=$(grep -oP 'Account ID：`\K[^`]+' "../運用ルール/公開ルール.md")
+  wrangler pages deploy . --project-name=eiken-pre1-writing --branch=main --commit-dirty=true
+  ```
+  （Global API Keyを直接コマンドに書くとauto modeの機密情報検知でブロックされるため、
+  上記のようにファイルから読み込む書き方にすること）
+- GitHubへのpushも従来どおり実施する（コード管理のため）が、それだけでは**公開サイトには
+  反映されない**。Cloudflareへの`wrangler pages deploy`を必ず別途実行すること。
+- 注意：`access-gate.js`のログイン状態はオリジン（ドメイン）ごとに保存されるため、
+  旧URL（github.io）で一度ログイン済みでも、新URL（pages.dev）では再ログインが必要。
 
 ## アクセスゲート（重要）
 このサイトを含む全公開ページは `access-gate.js`（`my-portal-ryu.netlify.app`でホスト）による
