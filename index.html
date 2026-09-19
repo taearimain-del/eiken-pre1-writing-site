@@ -1941,6 +1941,9 @@
       if (wrap) wrap.style.display = wrapOrigDisplay;
       if (btn) { btn.disabled = false; btn.textContent = btnOrigText; }
     };
+    // save()が固まった場合に備え、一定時間で強制的にUIを戻す（ダウンロード自体は
+    // ブラウザ側で継続する可能性があるが、画面が「作成中」のまま固まるのを防ぐ）
+    var safetyTimer = setTimeout(cleanup, 30000);
     html2pdf().set({
       margin: [14, 12, 14, 12],
       filename: (title || '英検準1級ライティング添削レポート').replace(/[\\/:*?"<>|]/g, '') + '.pdf',
@@ -1948,7 +1951,11 @@
       html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
       pagebreak: { mode: ['css', 'legacy'] }
-    }).from(host).save().then(cleanup).catch(function () {
+    }).from(host).save().then(function () {
+      clearTimeout(safetyTimer);
+      cleanup();
+    }).catch(function () {
+      clearTimeout(safetyTimer);
       cleanup();
       window.print();
     });
