@@ -1922,7 +1922,12 @@
       if (box) box.classList.remove('hide-ok');
       host.appendChild(c);
     });
-    host.style.cssText = 'display:block; position:fixed; left:-99999px; top:0; width:720px; background:#fff;';
+    // html2canvasはposition:fixed/absoluteの要素を内部コンテナに複製する際に
+    // 高さ0として捉えてしまうため、通常のフローに置いたまま.wrap側を隠す
+    var wrap = document.querySelector('.wrap');
+    var wrapOrigDisplay = wrap ? wrap.style.display : '';
+    if (wrap) wrap.style.display = 'none';
+    host.style.cssText = 'display:block; width:720px; background:#fff;';
     document.body.classList.add('printing-one');
     var btnOrigText = btn ? btn.textContent : null;
     if (btn) { btn.disabled = true; btn.textContent = 'PDFを作成中…'; }
@@ -1933,6 +1938,7 @@
       document.body.classList.remove('printing-one');
       host.style.cssText = '';
       host.innerHTML = '';
+      if (wrap) wrap.style.display = wrapOrigDisplay;
       if (btn) { btn.disabled = false; btn.textContent = btnOrigText; }
     };
     html2pdf().set({
