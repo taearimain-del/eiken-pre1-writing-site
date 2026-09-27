@@ -998,7 +998,7 @@
 
   <footer>
     進捗（完了マーク）はこの端末のブラウザだけに保存されます。PCとスマホでは別々にカウントされます。<br>
-    毎日「今日のタスク」を1本書いて、添削依頼をコピー → Claudeに貼る → 返ってきたJSONを貼り戻す、
+    毎日「今日のタスク」を1本書いて、添削依頼をコピー → AIに貼る → 返ってきたJSONを貼り戻す、
     ここまでが1セット。添削結果は「添削アーカイブ」にたまっていきます。
   </footer>
 </div>
@@ -2107,11 +2107,11 @@
         '</div>' +
         '<div class="action-row">' +
           '<button type="button" class="action-btn" data-role="copywork">' + cfg.copyLabel + '</button>' +
-          '<span class="action-hint">コピーしてClaudeに貼ると、一文ずつの添削がJSONで返る</span>' +
+          '<span class="action-hint">コピーしてAIに貼ると、一文ずつの添削がJSONで返る</span>' +
         '</div>' +
         '<div class="grade-block">' +
           '<div class="editor-bar" style="margin-bottom:8px;"><span class="editor-bar-label">添削レポートを貼り付け</span></div>' +
-          '<textarea class="feedback-input" placeholder="Claudeが返した ```json … ``` をまるごと貼る。読み込めれば下に添削レポートが表示され、アーカイブにも保存されます…"></textarea>' +
+          '<textarea class="feedback-input" placeholder="AIが返した ```json … ``` をまるごと貼る。読み込めれば下に添削レポートが表示され、アーカイブにも保存されます…"></textarea>' +
           '<div class="paste-status"></div>' +
           '<div class="review-host"></div>' +
           '<div class="grade-head" style="margin-top:14px;"><h4>点数の記録（4観点×各4点＝16点）</h4><span class="grade-total"></span></div>' +
@@ -2534,7 +2534,7 @@
       empty.className = 'arc-empty';
       empty.innerHTML = all.length
         ? 'この条件に合う添削レポートはありません。'
-        : 'まだ添削レポートがありません。<br>「今日のタスク」で作文を書き、添削依頼をコピーしてClaudeに貼り、<br>返ってきたJSONを貼り付け欄に戻すと、ここにたまっていきます。';
+        : 'まだ添削レポートがありません。<br>「今日のタスク」で作文を書き、添削依頼をコピーしてAIに貼り、<br>返ってきたJSONを貼り付け欄に戻すと、ここにたまっていきます。';
       listEl.appendChild(empty);
       return;
     }
