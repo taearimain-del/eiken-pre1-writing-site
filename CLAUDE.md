@@ -60,3 +60,6 @@ git push
 このサイトを含む全公開ページは `access-gate.js`（`my-portal-ryu.netlify.app`でホスト）による
 パスワード/Googleログインのロックが必須（2026-08-04指示。詳細は親CLAUDE.mdの
 「公開ページのアクセスゲート」参照）。`index.html`の`<head>`相当部分に既に組み込み済み。
+
+## 滞在時間ログ（2026-10-12）
+- `timelog.js`（原本 claude-workspace の `tools/timelog/timelog.js`）を `index.html` の末尾で読む（アプリID `eiken-pre1-writing`）。アクティビティログ（fort-log）で見られる。index.html を作り直したり元からコピーし直したりしたときも、この1行を残すこと。
